@@ -234,8 +234,18 @@ struct MenuBarView: View {
       }
       .buttonStyle(.plain).foregroundStyle(Color.authAccent).disabled(
         store.isLocked || store.loadFailed)
+      Button(action: exportAction) {
+        Label("导出备份", systemImage: "square.and.arrow.up")
+          .font(.system(size: 12, weight: .medium))
+      }
+      .buttonStyle(.plain).foregroundStyle(Color.authAccent)
+      .disabled(store.isLocked || store.loadFailed || store.accounts.isEmpty)
+      .help(store.isLocked ? "解锁后导出备份" : (store.accounts.isEmpty ? "添加账户后即可导出" : "导出全部账户"))
       Spacer()
-      Text("本地生成 · 离线可用").font(.system(size: 9)).foregroundStyle(.tertiary)
+      Text(
+        "v\(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "开发版")"
+      )
+      .font(.system(size: 10)).foregroundStyle(.tertiary)
       Menu {
         Button("添加账户 / 导入…", action: importAction).disabled(store.isLocked || store.loadFailed)
         Button("导出备份…", action: exportAction).disabled(

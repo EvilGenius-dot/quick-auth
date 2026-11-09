@@ -38,3 +38,6 @@ data/
 !Tests/QuickAuthCoreTests/Fixtures/encrypted-v1.json
 !Tests/QuickAuthCoreTests/Fixtures/encrypted-v2.json
 !Tests/QuickAuthCoreTests/Fixtures/encrypted-v3.json
+
+# Public app artwork; never add real account screenshots here.
+!docs/assets/app-icon.png
