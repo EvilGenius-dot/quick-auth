@@ -1,0 +1,12 @@
+{
+  "fixture": {
+    "dataType": "OTPStorage",
+    "type": "totp",
+    "issuer": "Fixture 测试",
+    "account": "test@example.com",
+    "secret": "U2FsdGVkX18BAgMEBQYHCFvHjvPJvWrTgrLjpD1ZyMSwl+HPS+1lm43E3KQBHNuvmLGmSfgtj3DuzTs2wzx+cA==",
+    "digits": 8,
+    "index": 0,
+    "encrypted": true
+  }
+}

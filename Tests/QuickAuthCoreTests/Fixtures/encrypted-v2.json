@@ -1,0 +1,16 @@
+{
+  "key": {
+    "enc": "U2FsdGVkX18BAgMEBQYHCEIlIT13al6Rd1+UV4ylALWWH8N97hwhGoN0yA6JkVOYKABlyz6vq0YzD2xZ1qh/1w==",
+    "hash": "synthetic-verifier"
+  },
+  "fixture": {
+    "dataType": "OTPStorage",
+    "type": "totp",
+    "issuer": "Fixture 测试",
+    "account": "test@example.com",
+    "secret": "U2FsdGVkX18BAgMEBQYHCI+nIEFH4KdnNQlpxnsqZGobs4jFGvWJbdfH8QD+8oQTDFqv4X5wHz0y2xUJqvvSKw==",
+    "digits": 8,
+    "index": 0,
+    "encrypted": true
+  }
+}

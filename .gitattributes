@@ -1,0 +1,2 @@
+# Preserve the vendored upstream source, including its original whitespace.
+Sources/CArgon2/** -whitespace

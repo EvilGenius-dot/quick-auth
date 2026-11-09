@@ -1,0 +1,14 @@
+{
+  "fixture-key": {
+    "dataType": "Key",
+    "id": "fixture-key",
+    "salt": "synthetic-key-salt",
+    "hash": "$argon2id$v=19$m=19456,t=2,p=1$c3ludGhldGljLXZlcmlmaWVyLXNhbHQ$T4DgU4sA0tTpLAnAxgfWn77Qvmpd/9oF+06ctTL32x8"
+  },
+  "fixture": {
+    "dataType": "EncOTPStorage",
+    "keyId": "fixture-key",
+    "index": 0,
+    "data": "U2FsdGVkX18BAgMEBQYHCIq0EOs15tJVborTH6VOZWWVGlJZtCNYxkf/kWjKEtFBh8R5nHRPfl0xM7jHon/dxk56TpzjA9JaAb7NG5Cbemd/7EQ4AJLxcgNe8rE7fTsBo9bo/cIkPp4MEU9+peUmb6HARTsOAHYQ+L+GawEgjVR/ryT7+FIkRgZPrbbbJxv1Jta4Nb3uv/EQlPmDwoBB1Wh3frez31+7BzPef93QDY9oh5MsMEzK3zSwh6UerK1dNp+YHl77QdZkwxplPU1ZAw=="
+  }
+}
