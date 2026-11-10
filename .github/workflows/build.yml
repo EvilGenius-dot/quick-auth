@@ -15,8 +15,8 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: '24'
           cache: npm
@@ -42,14 +42,14 @@ jobs:
           $env:QUICKAUTH_QR_FIXTURE = "$env:GITHUB_WORKSPACE/windows/test/fixtures/public-qr.png"
           $p = Start-Process -FilePath "dist/windows/win-unpacked/Quick Auth.exe" -ArgumentList "--smoke-test" -PassThru -Wait
           if ($p.ExitCode -ne 0) { throw "Packaged smoke failed: $($p.ExitCode)" }
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: windows
           path: |
             dist/windows/Quick-Auth-Windows-x64.exe
             dist/windows/Quick-Auth-Windows-x64.zip
           if-no-files-found: error
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         if: always()
         with:
           name: windows-ui-check
@@ -59,8 +59,8 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: '24'
           cache: npm
@@ -70,7 +70,7 @@ jobs:
       - run: bash scripts/swift.sh test
       - run: bash scripts/test-interop.sh
       - run: bash scripts/build-dmg.sh
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.2
         with:
           name: macos
           path: dist/Quick-Auth-macOS-universal.dmg
@@ -82,12 +82,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/download-artifact@v8.0.2
         with:
           name: windows
           path: release
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8.0.2
         with:
           name: macos
           path: release

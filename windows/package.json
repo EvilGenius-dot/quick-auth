@@ -27,6 +27,7 @@
     "appId": "local.quickauth.windows",
     "directories": { "output": "../dist/windows" },
     "files": ["src/**/*", "assets/**/*", "package.json"],
+    "extraResources": [{ "from": "../THIRD_PARTY.md", "to": "THIRD_PARTY.md" }],
     "asar": true,
     "win": {
       "icon": "assets/icon.ico",

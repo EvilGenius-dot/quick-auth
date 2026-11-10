@@ -22,3 +22,21 @@ The test password and secrets are intentionally public and must never be used fo
 
 Authenticator Extension's published backup schemas and source were consulted for interoperability.
 The application's Swift importer is an independent implementation of those formats.
+
+## Windows application
+
+The Windows app uses the following pinned runtime packages. Their upstream license
+files remain in the packaged dependencies; Electron's notices accompany the executable.
+
+| Dependency | Version | License | Source |
+| --- | --- | --- | --- |
+| Electron | 45.2.3 | MIT, plus bundled Chromium/Node notices | https://github.com/electron/electron |
+| hash-wasm | 4.13.0 | MIT | https://github.com/Daninet/hash-wasm |
+| jsQR | 1.4.0 | Apache-2.0 | https://github.com/cozmo/jsQR |
+| pngjs | 7.0.0 | MIT | https://github.com/pngjs/pngjs |
+
+Electron Builder 26.18.0 (MIT) is a build-time dependency and is not included in the
+application runtime. The complete dependency graph is pinned in `windows/package-lock.json`.
+`windows/test/fixtures/public-qr.png` encodes a public RFC test secret and must not be
+used for an actual account. The Windows importer is an independent implementation
+of the same backup formats as the Swift importer.

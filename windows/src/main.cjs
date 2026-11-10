@@ -39,7 +39,7 @@ function lock() { generation++; locked = true; accounts = []; clearPreview(); cl
 async function reload() {
   const token = generation;
   try { const loaded = await vault.load(); if (token !== generation) return; accounts = loaded; loadFailed = false; locked = false; }
-  catch { accounts = []; loadFailed = true; }
+  catch { if (token !== generation) return; accounts = []; loadFailed = true; locked = false; }
   broadcast();
 }
 async function commit(next, token) { checkToken(token); if (!demo) await vault.save(next); checkToken(token); accounts = next; broadcast(); }
