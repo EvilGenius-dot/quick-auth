@@ -1,3 +1,4 @@
+import QuickAuthCore
 import AppKit
 import ServiceManagement
 import SwiftUI
@@ -23,9 +24,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     if let button = statusItem.button {
       button.image = NSImage(
-        systemSymbolName: "lock.shield", accessibilityDescription: "Quick Auth 身份验证器")
+        systemSymbolName: "lock.shield", accessibilityDescription: L10n.text("Quick Auth 身份验证器"))
       button.image?.isTemplate = true
-      button.toolTip = "Quick Auth · 身份验证器"
+      button.toolTip = L10n.text("Quick Auth · 身份验证器")
       button.target = self
       button.action = #selector(togglePopover)
     }
@@ -39,6 +40,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
         exportAction: { [weak self] in self?.showExport() },
         loginAction: { [weak self] in self?.toggleLogin() }))
     let center = NSWorkspace.shared.notificationCenter
+    observers.append(
+      NotificationCenter.default.addObserver(forName: .languageChanged, object: nil, queue: .main) {
+        [weak self] _ in
+        Task { @MainActor in
+          self?.importWindow?.title = L10n.text("添加账户 · Quick Auth")
+          self?.exportWindow?.title = L10n.text("导出备份 · Quick Auth")
+          self?.statusItem.button?.toolTip = L10n.text("Quick Auth · 身份验证器")
+        }
+      })
     for name in [
       NSWorkspace.willSleepNotification, NSWorkspace.screensDidSleepNotification,
       NSWorkspace.sessionDidResignActiveNotification,
@@ -90,7 +100,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     let window = NSWindow(
       contentRect: NSRect(x: 0, y: 0, width: 600, height: 700),
       styleMask: [.titled, .closable], backing: .buffered, defer: false)
-    window.title = "添加账户 · Quick Auth"
+    window.title = L10n.text("添加账户 · Quick Auth")
     window.delegate = self
     window.isReleasedWhenClosed = false
     window.contentView = NSHostingView(
@@ -115,7 +125,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     let window = NSWindow(
       contentRect: NSRect(x: 0, y: 0, width: 550, height: 520),
       styleMask: [.titled, .closable], backing: .buffered, defer: false)
-    window.title = "导出备份 · Quick Auth"
+    window.title = L10n.text("导出备份 · Quick Auth")
     window.delegate = self
     window.isReleasedWhenClosed = false
     window.contentView = NSHostingView(
@@ -153,17 +163,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
       let service = SMAppService.mainApp
       if service.status == .enabled {
         try service.unregister()
-        store.message = "已关闭登录时启动"
+        store.message = L10n.text("已关闭登录时启动")
       } else {
         try service.register()
         if service.status == .requiresApproval {
           SMAppService.openSystemSettingsLoginItems()
-          store.message = "请在系统设置中允许登录项"
+          store.message = L10n.text("请在系统设置中允许登录项")
         } else {
-          store.message = "已开启登录时启动"
+          store.message = L10n.text("已开启登录时启动")
         }
       }
-    } catch { store.error = "无法设置登录项。请先把应用放入「应用程序」文件夹，再重试。" }
+    } catch { store.error = L10n.text("无法设置登录项。请先把应用放入「应用程序」文件夹，再重试。") }
   }
 
   func applicationWillTerminate(_ notification: Notification) { store.clearClipboard() }

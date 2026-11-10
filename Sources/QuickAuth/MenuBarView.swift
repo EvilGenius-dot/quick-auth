@@ -47,35 +47,35 @@ struct MenuBarView: View {
     .onReceive(NotificationCenter.default.publisher(for: .focusSearch)) { _ in searchFocused = true
     }
     .alert(
-      "操作未完成",
+      L10n.text("操作未完成"),
       isPresented: Binding(get: { store.error != nil }, set: { if !$0 { store.error = nil } })
     ) {
-      Button("好", role: .cancel) { store.error = nil }
+      Button(L10n.text("好"), role: .cancel) { store.error = nil }
     } message: {
       Text(store.error ?? "")
     }
     .alert(
-      "移除这个账户？", isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } })
+      L10n.text("移除这个账户？"), isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } })
     ) {
-      Button("取消", role: .cancel) { deleting = nil }
-      Button("移除", role: .destructive) {
+      Button(L10n.text("取消"), role: .cancel) { deleting = nil }
+      Button(L10n.text("移除"), role: .destructive) {
         if let account = deleting { store.delete(account) }
         deleting = nil
       }
     } message: {
-      Text("将从 Quick Auth 移除「\(deleting?.title ?? "")」。请确认你仍保留原插件或备份。")
+      Text(L10n.text("将从 Quick Auth 移除「\(deleting?.title ?? "")」。请确认你仍保留原插件或备份。"))
     }
     .alert(
-      "生成下一个 HOTP 验证码？",
+      L10n.text("生成下一个 HOTP 验证码？"),
       isPresented: Binding(get: { advancing != nil }, set: { if !$0 { advancing = nil } })
     ) {
-      Button("取消", role: .cancel) { advancing = nil }
-      Button("下一个") {
+      Button(L10n.text("取消"), role: .cancel) { advancing = nil }
+      Button(L10n.text("下一个")) {
         if let account = advancing { store.advance(account) }
         advancing = nil
       }
     } message: {
-      Text("计数器会增加 1。仅在当前验证码已使用后继续，避免与服务端失去同步。")
+      Text(L10n.text("计数器会增加 1。仅在当前验证码已使用后继续，避免与服务端失去同步。"))
     }
   }
 
@@ -90,12 +90,12 @@ struct MenuBarView: View {
           in: RoundedRectangle(cornerRadius: 12))
       VStack(alignment: .leading, spacing: 2) {
         Text("Quick Auth").font(.system(size: 17, weight: .semibold))
-        Text("验证码，随手可得").font(.system(size: 10)).foregroundStyle(.secondary)
+        Text(L10n.text("验证码，随手可得")).font(.system(size: 10)).foregroundStyle(.secondary)
       }
       Spacer()
       HStack(spacing: 4) {
         Circle().fill(store.demo ? Color.orange : Color.authAccent).frame(width: 5, height: 5)
-        Text(store.demo ? "演示模式" : "仅本机").font(.system(size: 10, weight: .medium))
+        Text(store.demo ? L10n.text("演示模式") : L10n.text("仅本机")).font(.system(size: 10, weight: .medium))
       }.foregroundStyle(.secondary).padding(.horizontal, 8).padding(.vertical, 5)
         .background(Color.primary.opacity(0.04), in: Capsule())
     }.padding(20).padding(.bottom, 2)
@@ -104,7 +104,7 @@ struct MenuBarView: View {
   private var searchBar: some View {
     HStack(spacing: 8) {
       Image(systemName: "magnifyingglass").font(.system(size: 13)).foregroundStyle(.secondary)
-      TextField("搜索账户或服务…", text: $store.query).textFieldStyle(.plain)
+      TextField(L10n.text("搜索账户或服务…"), text: $store.query).textFieldStyle(.plain)
         .font(.system(size: 13)).focused($searchFocused)
         .onSubmit { if let account = store.visibleAccounts.first { store.copy(account) } }
       if !store.query.isEmpty {
@@ -113,9 +113,9 @@ struct MenuBarView: View {
         } label: {
           Image(systemName: "xmark.circle.fill").foregroundStyle(.tertiary)
         }.buttonStyle(.plain)
-          .help("清除搜索")
+          .help(L10n.text("清除搜索"))
       } else {
-        Text("↵ 复制").font(.system(size: 10)).foregroundStyle(.tertiary)
+        Text(L10n.text("↵ 复制")).font(.system(size: 10)).foregroundStyle(.tertiary)
       }
     }.padding(.horizontal, 12).padding(.vertical, 11)
       .background(Color(nsColor: .textBackgroundColor), in: RoundedRectangle(cornerRadius: 10))
@@ -126,16 +126,16 @@ struct MenuBarView: View {
   private var accountList: some View {
     VStack(spacing: 0) {
       HStack(spacing: 4) {
-        filter("全部账户", favorite: false)
-        filter("已收藏", favorite: true)
+        filter(L10n.text("全部账户"), favorite: false)
+        filter(L10n.text("已收藏"), favorite: true)
         Spacer()
-        Text("\(store.visibleAccounts.count) 个").font(.system(size: 10)).foregroundStyle(.tertiary)
+        Text(L10n.text("\(store.visibleAccounts.count) 个")).font(.system(size: 10)).foregroundStyle(.tertiary)
       }.padding(.horizontal, 20).padding(.bottom, 10)
       if store.visibleAccounts.isEmpty {
         Spacer()
         Image(systemName: "magnifyingglass").font(.system(size: 26)).foregroundStyle(.tertiary)
-        Text("没有找到匹配的账户").font(.system(size: 13)).foregroundStyle(.secondary).padding(.top, 10)
-        Button("查看全部账户") {
+        Text(L10n.text("没有找到匹配的账户")).font(.system(size: 13)).foregroundStyle(.secondary).padding(.top, 10)
+        Button(L10n.text("查看全部账户")) {
           store.query = ""
           store.favoritesOnly = false
         }.buttonStyle(.plain).foregroundStyle(Color.authAccent).padding(.top, 8)
@@ -150,11 +150,11 @@ struct MenuBarView: View {
                   copy: { store.copy(account) }, favorite: { store.toggleFavorite(account) }
                 )
                 .contextMenu {
-                  Button("复制验证码") { store.copy(account) }
-                  Button(account.favorite ? "取消收藏" : "收藏账户") { store.toggleFavorite(account) }
-                  if account.kind == .hotp { Button("下一个 HOTP 验证码…") { advancing = account } }
+                  Button(L10n.text("复制验证码")) { store.copy(account) }
+                  Button(account.favorite ? L10n.text("取消收藏") : L10n.text("收藏账户")) { store.toggleFavorite(account) }
+                  if account.kind == .hotp { Button(L10n.text("下一个 HOTP 验证码…")) { advancing = account } }
                   Divider()
-                  Button("移除账户…", role: .destructive) { deleting = account }
+                  Button(L10n.text("移除账户…"), role: .destructive) { deleting = account }
                 }
               }
             }.padding(.horizontal, 20).padding(.bottom, 16)
@@ -188,15 +188,15 @@ struct MenuBarView: View {
         Image(systemName: "key.horizontal").font(.system(size: 29, weight: .light)).foregroundStyle(
           Color.authAccent)
       }
-      Text("把验证码带到菜单栏").font(.system(size: 19, weight: .semibold)).padding(.top, 20)
-      Text("导入 Chrome 身份验证器的备份，\n下次登录，点一下就好。").font(.system(size: 12)).foregroundStyle(.secondary)
+      Text(L10n.text("把验证码带到菜单栏")).font(.system(size: 19, weight: .semibold)).padding(.top, 20)
+      Text(L10n.text("导入 Chrome 身份验证器的备份，\n下次登录，点一下就好。")).font(.system(size: 12)).foregroundStyle(.secondary)
         .multilineTextAlignment(.center).lineSpacing(5).padding(.top, 9)
       Button(action: importAction) {
-        Label("导入我的账户", systemImage: "square.and.arrow.down").padding(.horizontal, 15).padding(
+        Label(L10n.text("导入我的账户"), systemImage: "square.and.arrow.down").padding(.horizontal, 15).padding(
           .vertical, 5)
       }
       .buttonStyle(.borderedProminent).controlSize(.large).padding(.top, 24)
-      Text("支持 JSON / TXT · 密码保护备份").font(.system(size: 10)).foregroundStyle(.tertiary).padding(
+      Text(L10n.text("支持 JSON / TXT · 密码保护备份")).font(.system(size: 10)).foregroundStyle(.tertiary).padding(
         .top, 12)
       Spacer()
       Spacer().frame(height: 20)
@@ -208,9 +208,9 @@ struct MenuBarView: View {
       Spacer()
       Image(systemName: "lock.shield").font(.system(size: 44, weight: .light)).foregroundStyle(
         Color.authAccent)
-      Text("验证码已锁定").font(.system(size: 19, weight: .semibold))
-      Text("使用 Touch ID 或 Mac 登录密码继续").font(.system(size: 12)).foregroundStyle(.secondary)
-      Button(store.isUnlocking ? "正在验证…" : "解锁") { store.unlock() }.buttonStyle(.borderedProminent)
+      Text(L10n.text("验证码已锁定")).font(.system(size: 19, weight: .semibold))
+      Text(L10n.text("使用 Touch ID 或 Mac 登录密码继续")).font(.system(size: 12)).foregroundStyle(.secondary)
+      Button(store.isUnlocking ? L10n.text("正在验证…") : L10n.text("解锁")) { store.unlock() }.buttonStyle(.borderedProminent)
         .controlSize(.large).disabled(store.isUnlocking)
       Spacer()
     }.frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -220,9 +220,9 @@ struct MenuBarView: View {
     VStack(spacing: 14) {
       Spacer()
       Image(systemName: "exclamationmark.lock").font(.system(size: 36)).foregroundStyle(.orange)
-      Text("暂时无法读取账户").font(.headline)
-      Text("请检查钥匙串权限，然后重试。\n现有账户不会被覆盖。").multilineTextAlignment(.center).foregroundStyle(.secondary)
-      Button("重新读取") { store.reload() }.buttonStyle(.borderedProminent)
+      Text(L10n.text("暂时无法读取账户")).font(.headline)
+      Text(L10n.text("请检查钥匙串权限，然后重试。\n现有账户不会被覆盖。")).multilineTextAlignment(.center).foregroundStyle(.secondary)
+      Button(L10n.text("重新读取")) { store.reload() }.buttonStyle(.borderedProminent)
       Spacer()
     }.frame(maxWidth: .infinity, maxHeight: .infinity)
   }
@@ -230,36 +230,42 @@ struct MenuBarView: View {
   private var footer: some View {
     HStack(spacing: 8) {
       Button(action: importAction) {
-        Label("添加账户", systemImage: "plus").font(.system(size: 12, weight: .medium))
+        Label(L10n.text("添加账户"), systemImage: "plus").font(.system(size: 12, weight: .medium))
       }
       .buttonStyle(.plain).foregroundStyle(Color.authAccent).disabled(
         store.isLocked || store.loadFailed)
       Button(action: exportAction) {
-        Label("导出备份", systemImage: "square.and.arrow.up")
+        Label(L10n.text("导出备份"), systemImage: "square.and.arrow.up")
           .font(.system(size: 12, weight: .medium))
       }
       .buttonStyle(.plain).foregroundStyle(Color.authAccent)
       .disabled(store.isLocked || store.loadFailed || store.accounts.isEmpty)
-      .help(store.isLocked ? "解锁后导出备份" : (store.accounts.isEmpty ? "添加账户后即可导出" : "导出全部账户"))
+      .help(store.isLocked ? L10n.text("解锁后导出备份") : (store.accounts.isEmpty ? L10n.text("添加账户后即可导出") : L10n.text("导出全部账户")))
       Spacer()
       Text(
-        "v\(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "开发版")"
+        "v\(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? L10n.text("开发版"))"
       )
       .font(.system(size: 10)).foregroundStyle(.tertiary)
       Menu {
-        Button("添加账户 / 导入…", action: importAction).disabled(store.isLocked || store.loadFailed)
-        Button("导出备份…", action: exportAction).disabled(
-          store.isLocked || store.loadFailed || store.accounts.isEmpty)
-        Button("锁定验证码") { store.lock() }.disabled(store.isLocked || store.demo)
+        Picker(L10n.text("语言 / Language"), selection: $store.language) {
+          Text(L10n.text("跟随系统")).tag("system")
+          Text("English").tag("en")
+          Text("简体中文").tag("zh-Hans")
+        }
         Divider()
-        Button(SMAppService.mainApp.status == .enabled ? "关闭登录时启动" : "登录时启动", action: loginAction)
+        Button(L10n.text("添加账户 / 导入…"), action: importAction).disabled(store.isLocked || store.loadFailed)
+        Button(L10n.text("导出备份…"), action: exportAction).disabled(
+          store.isLocked || store.loadFailed || store.accounts.isEmpty)
+        Button(L10n.text("锁定验证码")) { store.lock() }.disabled(store.isLocked || store.demo)
+        Divider()
+        Button(SMAppService.mainApp.status == .enabled ? L10n.text("关闭登录时启动") : L10n.text("登录时启动"), action: loginAction)
           .disabled(store.demo)
         Divider()
-        Button("退出 Quick Auth") { NSApp.terminate(nil) }.keyboardShortcut("q")
+        Button(L10n.text("退出 Quick Auth")) { NSApp.terminate(nil) }.keyboardShortcut("q")
       } label: {
         Image(systemName: "gearshape").font(.system(size: 13)).foregroundStyle(.secondary)
       }
-      .menuStyle(.borderlessButton).menuIndicator(.hidden).fixedSize().help("设置")
+      .menuStyle(.borderlessButton).menuIndicator(.hidden).fixedSize().help(L10n.text("设置"))
     }.padding(.horizontal, 20).padding(.vertical, 14)
       .background(Color.primary.opacity(0.025))
       .overlay(alignment: .top) { Rectangle().fill(Color.primary.opacity(0.06)).frame(height: 1) }
@@ -303,7 +309,7 @@ private struct AccountCard: View {
             .foregroundStyle(
               account.favorite
                 ? Color.orange.opacity(0.85) : Color.secondary.opacity(hovering ? 0.6 : 0.25))
-        }.buttonStyle(.plain).help(account.favorite ? "取消收藏" : "收藏")
+        }.buttonStyle(.plain).help(account.favorite ? L10n.text("取消收藏") : L10n.text("收藏"))
       }
       HStack {
         Button(action: copy) {
@@ -315,8 +321,8 @@ private struct AccountCard: View {
               .opacity(copied || hovering ? 1 : 0.3)
           }.foregroundStyle(copied ? Color.authAccent : Color.primary)
             .contentShape(Rectangle())
-        }.buttonStyle(.plain).help(copied ? "已复制 · 30 秒后自动清除" : "复制验证码")
-          .accessibilityLabel("复制 \(account.title) 的验证码")
+        }.buttonStyle(.plain).help(copied ? L10n.text("已复制 · 30 秒后自动清除") : L10n.text("复制验证码"))
+          .accessibilityLabel(L10n.text("复制 \(account.title) 的验证码"))
         Spacer(minLength: 4)
         if account.kind == .hotp {
           Text("HOTP").font(.system(size: 9, weight: .medium)).foregroundStyle(.secondary)
@@ -330,7 +336,7 @@ private struct AccountCard: View {
               ).rotationEffect(.degrees(-90))
             Text("\(remaining)").font(.system(size: 9, weight: .medium, design: .monospaced))
               .foregroundStyle(.secondary)
-          }.frame(width: 27, height: 27).help("\(remaining) 秒后刷新")
+          }.frame(width: 27, height: 27).help(L10n.text("\(remaining) 秒后刷新"))
         }
       }
     }.padding(14)

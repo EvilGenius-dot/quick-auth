@@ -16,12 +16,12 @@ public struct AccountInput: Equatable {
   public func makeAccount() throws -> OTPAccount {
     let issuer = issuer.trimmingCharacters(in: .whitespacesAndNewlines)
     let account = account.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !issuer.isEmpty || !account.isEmpty else { throw AuthError.invalid("请填写服务名称或账号。") }
+    guard !issuer.isEmpty || !account.isEmpty else { throw AuthError.invalid(L10n.text("请填写服务名称或账号。")) }
     guard let interval = kind == .hotp ? 30 : Int(period), (1...86400).contains(interval) else {
-      throw AuthError.invalid("刷新周期应为 1–86400 秒的整数。")
+      throw AuthError.invalid(L10n.text("刷新周期应为 1–86400 秒的整数。"))
     }
     guard let counter = kind == .hotp ? UInt64(counter) : 0 else {
-      throw AuthError.invalid("计数器应为非负整数。")
+      throw AuthError.invalid(L10n.text("计数器应为非负整数。"))
     }
     let data = try hexadecimal ? Base32.decodeHex(secret) : Base32.decode(secret)
     return try OTPAccount(

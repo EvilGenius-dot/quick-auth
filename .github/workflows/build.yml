@@ -1,0 +1,102 @@
+name: Build and release
+
+on:
+  push:
+    branches: [main, 'codex/**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+      - run: npm ci --no-fund
+        working-directory: windows
+      - run: npm test
+        working-directory: windows
+      - name: UI, QR and Windows DPAPI smoke test
+        working-directory: windows
+        shell: pwsh
+        run: |
+          $env:QUICKAUTH_SCREENSHOTS = "$env:RUNNER_TEMP/quick-auth-ui"
+          $env:QUICKAUTH_QR_FIXTURE = "$env:GITHUB_WORKSPACE/windows/test/fixtures/public-qr.png"
+          npm run smoke
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Build installer and zip
+        run: npm run dist
+        working-directory: windows
+      - name: Smoke test the packaged application
+        shell: pwsh
+        run: |
+          $env:QUICKAUTH_QR_FIXTURE = "$env:GITHUB_WORKSPACE/windows/test/fixtures/public-qr.png"
+          $p = Start-Process -FilePath "dist/windows/win-unpacked/Quick Auth.exe" -ArgumentList "--smoke-test" -PassThru -Wait
+          if ($p.ExitCode -ne 0) { throw "Packaged smoke failed: $($p.ExitCode)" }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: |
+            dist/windows/Quick-Auth-Windows-x64.exe
+            dist/windows/Quick-Auth-Windows-x64.zip
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-ui-check
+          path: ${{ runner.temp }}/quick-auth-ui/*.png
+          if-no-files-found: ignore
+  macos:
+    runs-on: macos-15
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+      - run: npm ci --ignore-scripts --no-fund
+        working-directory: windows
+      - run: bash scripts/swift.sh test
+      - run: bash scripts/test-interop.sh
+      - run: bash scripts/build-dmg.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: dist/Quick-Auth-macOS-universal.dmg
+          if-no-files-found: error
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [windows, macos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows
+          path: release
+      - uses: actions/download-artifact@v4
+        with:
+          name: macos
+          path: release
+      - name: Publish verified assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          cd release
+          sha256sum Quick-Auth-* > SHA256SUMS.txt
+          cd ..
+          gh release create "$RELEASE_TAG" release/* --verify-tag --title "Quick Auth $RELEASE_TAG" --notes-file docs/RELEASE_NOTES.md

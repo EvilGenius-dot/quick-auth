@@ -10,9 +10,9 @@ public enum AuthError: LocalizedError, Equatable {
   public var errorDescription: String? {
     switch self {
     case .invalid(let message): return message
-    case .passwordRequired: return "这是密码保护备份，请输入导出时设置的备份密码。"
-    case .decryptionFailed: return "密码不正确，或加密备份已损坏。请检查密码和原始文件后重试。"
-    case .emptyBackup: return "备份中没有找到可导入的账户。请选择 Authenticator 导出的 JSON 或 TXT 文件。"
+    case .passwordRequired: return L10n.text("这是密码保护备份，请输入导出时设置的备份密码。")
+    case .decryptionFailed: return L10n.text("密码不正确，或加密备份已损坏。请检查密码和原始文件后重试。")
+    case .emptyBackup: return L10n.text("备份中没有找到可导入的账户。请选择 Authenticator 导出的 JSON 或 TXT 文件。")
     }
   }
 }
@@ -58,14 +58,14 @@ public struct OTPAccount: Identifiable, Codable, Equatable, Sendable {
   }
 
   public func validate() throws {
-    guard !secret.isEmpty, secret.count <= 1024 else { throw AuthError.invalid("密钥为空或过长。") }
-    guard (6...10).contains(digits) else { throw AuthError.invalid("不支持的验证码位数（支持 6–10 位）。") }
-    guard (1...86400).contains(period) else { throw AuthError.invalid("验证码周期必须在 1–86400 秒之间。") }
-    guard issuer.count <= 512, account.count <= 512 else { throw AuthError.invalid("账户名称过长。") }
+    guard !secret.isEmpty, secret.count <= 1024 else { throw AuthError.invalid(L10n.text("密钥为空或过长。")) }
+    guard (6...10).contains(digits) else { throw AuthError.invalid(L10n.text("不支持的验证码位数（支持 6–10 位）。")) }
+    guard (1...86400).contains(period) else { throw AuthError.invalid(L10n.text("验证码周期必须在 1–86400 秒之间。")) }
+    guard issuer.count <= 512, account.count <= 512 else { throw AuthError.invalid(L10n.text("账户名称过长。")) }
   }
 
-  public var title: String { issuer.isEmpty ? (account.isEmpty ? "未命名账户" : account) : issuer }
-  public var subtitle: String { issuer.isEmpty ? "身份验证器" : (account.isEmpty ? "未命名账户" : account) }
+  public var title: String { issuer.isEmpty ? (account.isEmpty ? L10n.text("未命名账户") : account) : issuer }
+  public var subtitle: String { issuer.isEmpty ? L10n.text("身份验证器") : (account.isEmpty ? L10n.text("未命名账户") : account) }
 
   // Counter is intentionally excluded: importing an old HOTP backup must never rewind it.
   public var fingerprint: String {
@@ -146,14 +146,14 @@ public enum Base32 {
     guard let required = remainders[body.count % 8], !body.isEmpty,
       padding == 0 || (padding == required && normalized.suffix(padding).allSatisfy({ $0 == "=" }))
     else {
-      throw AuthError.invalid("密钥不是有效的 Base32 文本。")
+      throw AuthError.invalid(L10n.text("密钥不是有效的 Base32 文本。"))
     }
     let alphabet = Array("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567".utf8)
     var buffer: UInt32 = 0
     var bits = 0
     var bytes = Data()
     for byte in body.utf8 {
-      guard let value = alphabet.firstIndex(of: byte) else { throw AuthError.invalid("密钥包含无效字符。") }
+      guard let value = alphabet.firstIndex(of: byte) else { throw AuthError.invalid(L10n.text("密钥包含无效字符。")) }
       buffer = (buffer << 5) | UInt32(value)
       bits += 5
       if bits >= 8 {
@@ -162,19 +162,19 @@ public enum Base32 {
       }
       buffer &= (1 << bits) - 1
     }
-    guard buffer == 0, !bytes.isEmpty else { throw AuthError.invalid("密钥长度或末尾填充无效。") }
+    guard buffer == 0, !bytes.isEmpty else { throw AuthError.invalid(L10n.text("密钥长度或末尾填充无效。")) }
     return bytes
   }
 
   public static func decodeHex(_ input: String) throws -> Data {
     let text = input.filter { !$0.isWhitespace }
-    guard !text.isEmpty, text.count % 2 == 0 else { throw AuthError.invalid("十六进制密钥长度无效。") }
+    guard !text.isEmpty, text.count % 2 == 0 else { throw AuthError.invalid(L10n.text("十六进制密钥长度无效。")) }
     var bytes = Data()
     var index = text.startIndex
     while index < text.endIndex {
       let end = text.index(index, offsetBy: 2)
       guard let byte = UInt8(text[index..<end], radix: 16) else {
-        throw AuthError.invalid("十六进制密钥包含无效字符。")
+        throw AuthError.invalid(L10n.text("十六进制密钥包含无效字符。"))
       }
       bytes.append(byte)
       index = end

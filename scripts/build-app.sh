@@ -1,8 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
-bash scripts/swift.sh build -c release
-binary_dir="$(bash scripts/swift.sh build -c release --show-bin-path)"
+build_args=()
+if [[ "${QUICKAUTH_UNIVERSAL:-0}" == "1" ]]; then
+  build_args=(--arch arm64 --arch x86_64)
+fi
+bash scripts/swift.sh build -c release "${build_args[@]}"
+binary_dir="$(bash scripts/swift.sh build -c release "${build_args[@]}" --show-bin-path)"
 app_dir="${QUICKAUTH_APP_OUTPUT:-$PWD/dist/Quick Auth.app}"
 mkdir -p "$app_dir/Contents/MacOS" "$app_dir/Contents/Resources"
 cp "$binary_dir/QuickAuth" "$app_dir/Contents/MacOS/QuickAuth.new"

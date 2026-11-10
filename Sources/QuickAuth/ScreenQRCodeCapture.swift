@@ -28,7 +28,7 @@ final class ScreenQRCodeCapture: ObservableObject {
     guard !isCapturing else { return }
     error = nil
     guard CGPreflightScreenCaptureAccess() || CGRequestScreenCaptureAccess() else {
-      error = "请在系统设置 → 隐私与安全性 → 屏幕录制中允许 Quick Auth，然后重新打开应用。也可直接粘贴二维码截图。"
+      error = L10n.text("请在系统设置 → 隐私与安全性 → 屏幕录制中允许 Quick Auth，然后重新打开应用。也可直接粘贴二维码截图。")
       return
     }
     let token = UUID()
@@ -40,7 +40,7 @@ final class ScreenQRCodeCapture: ObservableObject {
         at: folder, withIntermediateDirectories: false,
         attributes: [.posixPermissions: 0o700])
     } catch {
-      self.error = "无法创建临时截图，请使用粘贴截图。"
+      self.error = L10n.text("无法创建临时截图，请使用粘贴截图。")
       return
     }
     let file = folder.appendingPathComponent("selection.png")
@@ -63,13 +63,13 @@ final class ScreenQRCodeCapture: ObservableObject {
         // Escape cancels macOS region selection without producing a file.
         guard FileManager.default.fileExists(atPath: file.path) else { return }
         guard finished.terminationStatus == 0 else {
-          self.error = "屏幕截取未完成，请重试。"
+          self.error = L10n.text("屏幕截取未完成，请重试。")
           return
         }
         do {
           let size = try file.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
           guard size <= QRCodeReader.maximumImageBytes else {
-            throw AuthError.invalid("选区过大，请仅框选二维码区域。")
+            throw AuthError.invalid(L10n.text("选区过大，请仅框选二维码区域。"))
           }
           let data = try Data(contentsOf: file)
           try? FileManager.default.removeItem(at: folder)
@@ -85,7 +85,7 @@ final class ScreenQRCodeCapture: ObservableObject {
       guard let self, self.generation == token else { return }
       do { try task.run() } catch {
         self.cancel()
-        self.error = "无法启动系统截图工具，请使用粘贴截图。"
+        self.error = L10n.text("无法启动系统截图工具，请使用粘贴截图。")
         NSApp.unhide(nil)
         NSApp.activate(ignoringOtherApps: true)
         window?.makeKeyAndOrderFront(nil)

@@ -29,10 +29,10 @@ public struct KeychainVault: VaultStorage {
     guard let data = result as? Data,
       let envelope = try? JSONDecoder().decode(Envelope.self, from: data),
       envelope.version == 1
-    else { throw AuthError.invalid("钥匙串中的账户数据无法读取。为保护原数据，已暂停写入。") }
+    else { throw AuthError.invalid(L10n.text("钥匙串中的账户数据无法读取。为保护原数据，已暂停写入。")) }
     try envelope.accounts.forEach { try $0.validate() }
     guard Set(envelope.accounts.map(\.id)).count == envelope.accounts.count else {
-      throw AuthError.invalid("账户数据存在重复标识，已暂停写入。")
+      throw AuthError.invalid(L10n.text("账户数据存在重复标识，已暂停写入。"))
     }
     return envelope.accounts
   }
@@ -45,7 +45,7 @@ public struct KeychainVault: VaultStorage {
     if status == errSecItemNotFound {
       var item = query
       item[kSecValueData as String] = data
-      item[kSecAttrLabel as String] = "Quick Auth · 身份验证账户"
+      item[kSecAttrLabel as String] = L10n.text("Quick Auth · 身份验证账户")
       item[kSecAttrAccessible as String] = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
       let added = SecItemAdd(item as CFDictionary, nil)
       guard added == errSecSuccess else { throw VaultError(status: added) }
@@ -63,6 +63,6 @@ public struct KeychainVault: VaultStorage {
 public struct VaultError: LocalizedError {
   public let status: OSStatus
   public var errorDescription: String? {
-    "无法访问系统钥匙串（\(status)）。请解锁登录钥匙串或允许 Quick Auth 访问后重试。"
+    L10n.text("无法访问系统钥匙串（\(status)）。请解锁登录钥匙串或允许 Quick Auth 访问后重试。")
   }
 }

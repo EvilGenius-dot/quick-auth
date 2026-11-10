@@ -32,6 +32,10 @@ data/
 *.p12
 *.pfx
 *.tmp
+node_modules/
+*.dmg
+*.exe
+*.blockmap
 
 # Reviewed, public synthetic test backups only.
 !Tests/QuickAuthCoreTests/Fixtures/plain.json
@@ -41,3 +45,7 @@ data/
 
 # Public app artwork; never add real account screenshots here.
 !docs/assets/app-icon.png
+!windows/package.json
+!windows/package-lock.json
+!windows/assets/icon.png
+!windows/test/fixtures/public-qr.png

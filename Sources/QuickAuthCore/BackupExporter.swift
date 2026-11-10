@@ -6,7 +6,7 @@ import Security
 public enum BackupExporter {
   public static func plaintext(_ accounts: [OTPAccount]) throws -> Data {
     guard !accounts.isEmpty else { throw AuthError.emptyBackup }
-    guard accounts.count <= 5000 else { throw AuthError.invalid("一次最多导出 5000 个账户。") }
+    guard accounts.count <= 5000 else { throw AuthError.invalid(L10n.text("一次最多导出 5000 个账户。")) }
     var records: [String: Any] = [:]
     for (index, account) in accounts.enumerated() {
       try account.validate()
@@ -20,23 +20,23 @@ public enum BackupExporter {
     }
     let data = try JSONSerialization.data(
       withJSONObject: records, options: [.prettyPrinted, .sortedKeys])
-    guard data.count <= BackupImporter.maximumBytes else { throw AuthError.invalid("备份过大，无法导出。") }
+    guard data.count <= BackupImporter.maximumBytes else { throw AuthError.invalid(L10n.text("备份过大，无法导出。")) }
     return data
   }
 
   public static func encrypted(_ accounts: [OTPAccount], password: String) throws -> Data {
     guard password.count >= 8, password.utf8.count <= 4096 else {
-      throw AuthError.invalid("备份密码至少需要 8 个字符，且不能超过 4096 字节。")
+      throw AuthError.invalid(L10n.text("备份密码至少需要 8 个字符，且不能超过 4096 字节。"))
     }
     let plaintext = try plaintext(accounts)
     var salt = Data(count: 16)
     let status = salt.withUnsafeMutableBytes {
       SecRandomCopyBytes(kSecRandomDefault, 16, $0.baseAddress!)
     }
-    guard status == errSecSuccess else { throw AuthError.invalid("无法生成安全随机数，导出已取消。") }
+    guard status == errSecSuccess else { throw AuthError.invalid(L10n.text("无法生成安全随机数，导出已取消。")) }
     let key = try derive(password: password, salt: salt, iterations: iterations)
     let ciphertext = try AES.GCM.seal(plaintext, using: key, authenticating: context)
-    guard let combined = ciphertext.combined else { throw AuthError.invalid("无法加密备份。") }
+    guard let combined = ciphertext.combined else { throw AuthError.invalid(L10n.text("无法加密备份。")) }
     let envelope = EncryptedBackup(
       format: "quickauth", version: 1, kdf: "PBKDF2-SHA256",
       iterations: iterations, salt: salt, cipher: "AES-256-GCM", data: combined)
@@ -44,7 +44,7 @@ public enum BackupExporter {
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
     let output = try encoder.encode(envelope)
     guard output.count <= BackupImporter.maximumBytes else {
-      throw AuthError.invalid("加密备份超过 5 MB，无法导出。")
+      throw AuthError.invalid(L10n.text("加密备份超过 5 MB，无法导出。"))
     }
     return output
   }
@@ -55,7 +55,7 @@ public enum BackupExporter {
       envelope.kdf == "PBKDF2-SHA256", envelope.cipher == "AES-256-GCM",
       (100000...2_000_000).contains(envelope.iterations), envelope.salt.count == 16,
       envelope.data.count >= 28
-    else { throw AuthError.invalid("不支持或已损坏的 Quick Auth 加密备份。") }
+    else { throw AuthError.invalid(L10n.text("不支持或已损坏的 Quick Auth 加密备份。")) }
     guard let password, !password.isEmpty else { throw AuthError.passwordRequired }
     guard password.utf8.count <= 4096 else { throw AuthError.decryptionFailed }
     do {

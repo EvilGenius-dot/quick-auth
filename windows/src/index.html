@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'"><title>Quick Auth</title><link rel="stylesheet" href="style.css"></head>
+<body data-view="home">
+<header><img class="logo" src="../assets/icon.png" alt=""><div><h1>Quick Auth</h1><p data-i18n="tagline"></p></div><span id="privacy" class="pill"></span><button id="hide" class="icon" data-title="hide" aria-label="Hide">−</button></header>
+<div id="notice" role="status" hidden></div>
+<main>
+<section id="home" class="page">
+  <div id="available"><div class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" autocomplete="off" data-placeholder="search" data-label="search"><kbd>↵</kbd></div><div class="filters"><button id="all" class="selected" data-i18n="all"></button><button id="favorites" data-i18n="favorites"></button><span id="count"></span></div><div id="accounts"></div><div id="empty" class="empty"><div class="empty-icon">◇</div><h2 data-i18n="emptyTitle"></h2><p data-i18n="emptyHint"></p><button id="firstAdd" class="primary" data-i18n="add"></button></div><div id="noMatch" class="empty" hidden><h2 data-i18n="noMatch"></h2></div></div>
+  <div id="unavailable" class="empty" hidden><div class="empty-icon">◇</div><h2 id="unavailableTitle"></h2><p id="unavailableHint"></p><button id="retry" class="primary" data-i18n="retry"></button></div>
+</section>
+<section id="add" class="page" hidden>
+  <h2 data-i18n="addTitle"></h2><p class="hint" data-i18n="addHint"></p>
+  <div class="tabs" role="tablist"><button data-source="file" class="selected" data-i18n="file"></button><button data-source="text" data-i18n="paste"></button><button data-source="manual" data-i18n="manual"></button><button data-source="qr" data-i18n="qr"></button></div>
+  <div id="fileSource" class="source"><div class="dropzone"><span class="file-icon">↧</span><strong id="filename" data-i18n="chooseHint"></strong><p class="hint" data-i18n="fileHint"></p><button id="chooseFile" data-i18n="chooseFile"></button></div></div>
+  <div id="textSource" class="source" hidden><label data-i18n="pasteHint" for="backupText"></label><textarea id="backupText" rows="5" spellcheck="false" autocomplete="off"></textarea></div>
+  <div id="manualSource" class="source" hidden><form id="manualForm" autocomplete="off">
+    <label><span data-i18n="issuer"></span><input name="issuer" maxlength="512"></label>
+    <label><span data-i18n="account"></span><input name="account" maxlength="512"></label>
+    <label><span data-i18n="secret"></span><input name="secret" type="password" autocomplete="new-password" maxlength="8192" spellcheck="false"></label>
+    <div class="columns"><label><span data-i18n="encoding"></span><select name="encoding"><option value="base32">Base32</option><option value="hex" data-i18n="hex"></option></select></label><label><span data-i18n="type"></span><select name="kind"><option value="totp">TOTP</option><option value="hotp">HOTP</option><option value="steam">Steam</option></select></label></div>
+    <div class="columns"><label><span data-i18n="algorithm"></span><select name="algorithm"><option>SHA1</option><option>SHA256</option><option>SHA512</option></select></label><label id="digitsField"><span data-i18n="digits"></span><select name="digits"><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label></div>
+    <label id="periodField"><span data-i18n="period"></span><input name="period" value="30" inputmode="numeric"></label><label id="counterField" hidden><span data-i18n="counter"></span><input name="counter" value="0" inputmode="numeric"></label><p class="hint" data-i18n="defaults"></p>
+  </form></div>
+  <div id="qrSource" class="source" hidden><p class="hint" data-i18n="qrHint"></p><div class="qr-actions"><button id="qrScreen" class="primary" data-i18n="scan"></button><button id="qrFile" data-i18n="qrFile"></button><button id="qrPaste" data-i18n="qrPaste"></button></div><div class="qr-mark" aria-hidden="true">▣</div><p class="hint" data-i18n="qrNote"></p></div>
+  <label id="passwordField" hidden><span data-i18n="backupPassword"></span><input id="importPassword" type="password" autocomplete="off" maxlength="4096"></label>
+  <div id="preview" hidden><h3 data-i18n="previewTitle"></h3><p id="previewCount" class="accent"></p><div id="previewAccounts"></div><div id="previewIssues"></div><label id="partialLabel" class="check" hidden><input id="allowPartial" type="checkbox"><span data-i18n="allowPartial"></span></label></div>
+  <p class="hint storage-note" data-i18n="localStorage"></p>
+</section>
+<section id="export" class="page" hidden>
+  <h2 data-i18n="export"></h2><p id="exportCount" class="hint"></p>
+  <label><span data-i18n="format"></span><select id="exportFormat"><option value="encrypted" data-i18n="encrypted"></option><option value="plaintext" data-i18n="plaintext"></option></select></label>
+  <div id="encryptedFields"><label><span data-i18n="newPassword"></span><input id="exportPassword" type="password" autocomplete="new-password" maxlength="4096"></label><label><span data-i18n="confirmPassword"></span><input id="confirmation" type="password" autocomplete="new-password" maxlength="4096"></label><p class="hint" data-i18n="passwordHint"></p></div>
+  <div id="plaintextFields" class="warning" hidden><h3 data-i18n="plaintextTitle"></h3><p data-i18n="plaintextHint"></p><label class="check"><input type="checkbox" id="acceptPlaintext"><span data-i18n="acceptPlaintext"></span></label></div>
+  <p class="hint storage-note" data-i18n="exportHint"></p>
+</section>
+</main>
+<footer><div id="homeFooter"><button id="addButton" class="text-button" data-i18n="add"></button><button id="exportButton" class="text-button" data-i18n="export"></button><span id="version"></span><details id="settings"><summary data-title="settings" aria-label="Settings">⚙</summary><div class="settings-panel"><label><span>Language / 语言</span><select id="language"><option value="system" data-i18n="system"></option><option value="en">English</option><option value="zh-CN">简体中文</option></select></label><label class="check"><input id="login" type="checkbox"><span data-i18n="login"></span></label><button id="lock" data-i18n="lockWindows"></button></div></details></div><div id="formFooter" hidden><button id="cancel" data-i18n="cancel"></button><span id="working" class="hint" hidden data-i18n="working"></span><button id="previewButton" class="primary" data-i18n="preview"></button><button id="importButton" class="primary" hidden data-i18n="import"></button><button id="saveExport" class="primary" hidden data-i18n="saveExport"></button></div></footer>
+<script src="i18n.js"></script><script src="renderer.js"></script></body></html>

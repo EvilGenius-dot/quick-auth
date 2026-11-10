@@ -1,0 +1,47 @@
+{
+  "name": "quick-auth",
+  "productName": "Quick Auth",
+  "version": "1.2.0",
+  "description": "A private, bilingual system tray authenticator",
+  "author": "EvilGenius-dot",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "src/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "demo": "electron . --demo",
+    "test": "node --test test/*.test.cjs",
+    "smoke": "electron . --smoke-test",
+    "dist": "electron-builder --win nsis zip --x64 --publish never"
+  },
+  "dependencies": {
+    "hash-wasm": "4.13.0",
+    "jsqr": "1.4.0",
+    "pngjs": "7.0.0"
+  },
+  "devDependencies": {
+    "electron": "45.2.3",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "local.quickauth.windows",
+    "directories": { "output": "../dist/windows" },
+    "files": ["src/**/*", "assets/**/*", "package.json"],
+    "asar": true,
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": ["nsis", "zip"],
+      "artifactName": "Quick-Auth-Windows-x64.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": false,
+      "createStartMenuShortcut": true,
+      "deleteAppDataOnUninstall": false,
+      "installerLanguages": ["en_US", "zh_CN"],
+      "displayLanguageSelector": true
+    }
+  }
+}
