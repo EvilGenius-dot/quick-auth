@@ -20,6 +20,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
 
   func applicationDidFinishLaunching(_ notification: Notification) {
     NSApp.setActivationPolicy(.accessory)
+    NSApp.appearance = NSAppearance(named: .darkAqua)
     store = AppStore(demo: CommandLine.arguments.contains("--demo"))
     statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     if let button = statusItem.button {
@@ -30,7 +31,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
       button.target = self
       button.action = #selector(togglePopover)
     }
-    popover.contentSize = NSSize(width: 388, height: 568)
+    popover.contentSize = NSSize(width: 400, height: 600)
+    popover.appearance = NSAppearance(named: .darkAqua)
     popover.behavior = .transient
     popover.delegate = self
     popover.contentViewController = NSHostingController(
@@ -43,7 +45,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     observers.append(
       NotificationCenter.default.addObserver(forName: .languageChanged, object: nil, queue: .main) {
         [weak self] _ in
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
           self?.importWindow?.title = L10n.text("添加账户 · Quick Auth")
           self?.exportWindow?.title = L10n.text("导出备份 · Quick Auth")
           self?.statusItem.button?.toolTip = L10n.text("Quick Auth · 身份验证器")
@@ -55,7 +57,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     ] {
       observers.append(
         center.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
-          Task { @MainActor in self?.store.lock() }
+          Task { @MainActor [weak self] in self?.store.lock() }
         })
     }
     DistributedNotificationCenter.default().addObserver(
@@ -64,7 +66,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     observers.append(
       NotificationCenter.default.addObserver(forName: .vaultLocked, object: nil, queue: .main) {
         [weak self] _ in
-        Task { @MainActor in
+        Task { @MainActor [weak self] in
           self?.importWindow?.close()
           self?.importWindow = nil
           self?.exportWindow?.close()
@@ -103,6 +105,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     window.title = L10n.text("添加账户 · Quick Auth")
     window.delegate = self
     window.isReleasedWhenClosed = false
+    window.isOpaque = false
+    window.backgroundColor = .clear
+    window.appearance = NSAppearance(named: .darkAqua)
+    window.titlebarAppearsTransparent = true
     window.contentView = NSHostingView(
       rootView: ImportView(store: store) { [weak self, weak window] in
         window?.close()
@@ -128,6 +134,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     window.title = L10n.text("导出备份 · Quick Auth")
     window.delegate = self
     window.isReleasedWhenClosed = false
+    window.isOpaque = false
+    window.backgroundColor = .clear
+    window.appearance = NSAppearance(named: .darkAqua)
+    window.titlebarAppearsTransparent = true
     window.contentView = NSHostingView(
       rootView: ExportView(store: store) { [weak self, weak window] in
         window?.close()

@@ -1,5 +1,5 @@
 'use strict';
-const { app, BrowserWindow, Tray, Menu, ipcMain, dialog, clipboard, safeStorage, screen, desktopCapturer, nativeImage, powerMonitor, session } = require('electron');
+const { app, BrowserWindow, Tray, Menu, ipcMain, dialog, clipboard, safeStorage, screen, desktopCapturer, nativeImage, nativeTheme, powerMonitor, session } = require('electron');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const os = require('node:os');
@@ -227,7 +227,19 @@ else {
     vault = new Vault(directory, safeStorage);
     if (demo || smoke) accounts = ['GitHub', 'Google', 'Cloudflare', 'Microsoft'].map((issuer, i) => core.parseRecord({ issuer, account: 'hello@example.com', secret: core.base32Encode(Buffer.from(`demo-only-secret-${i}`)), pinned: i === 0 }));
     else await reload();
-    window = new BrowserWindow({ width: 440, height: 680, show: false, frame: false, resizable: false, skipTaskbar: true, backgroundColor: '#f6f8f7', title: 'Quick Auth', icon: path.join(__dirname, '../assets/icon.png'), webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, sandbox: true, nodeIntegration: false, spellcheck: false } });
+    nativeTheme.themeSource = 'dark';
+    // DWM Acrylic is available from Windows 11 22H2. Older systems retain an
+    // opaque obsidian backdrop instead of exposing unblurred desktop content.
+    const acrylic = process.platform === 'win32' && Number(os.release().split('.')[2]) >= 22621;
+    const useGlass = (acrylic || process.platform === 'darwin') && !nativeTheme.shouldUseHighContrastColors && !nativeTheme.prefersReducedTransparency;
+    window = new BrowserWindow({
+      width: 440, height: 680, show: false, frame: false, resizable: false,
+      skipTaskbar: true, backgroundColor: useGlass ? '#00000000' : '#0b0c0f',
+      ...(useGlass && acrylic ? { backgroundMaterial: 'acrylic' } : {}),
+      ...(useGlass && process.platform === 'darwin' ? { vibrancy: 'hud', visualEffectState: 'active' } : {}),
+      title: 'Quick Auth', icon: path.join(__dirname, '../assets/icon.png'),
+      webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, sandbox: true, nodeIntegration: false, spellcheck: false }
+    });
     secureWindow(window, indexURL);
     window.on('blur', () => { if (!smoke && activeView === 'home' && !busy) window.hide(); });
     window.on('close', event => { if (!app.isQuitting && !smoke) { event.preventDefault(); window.hide(); } });

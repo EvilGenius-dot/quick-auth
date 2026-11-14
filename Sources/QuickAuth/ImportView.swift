@@ -71,7 +71,7 @@ struct ImportView: View {
               TextEditor(text: $text).font(.system(size: 12, design: .monospaced))
                 .scrollContentBackground(.hidden)
                 .padding(8).frame(height: 140).background(
-                  Color(nsColor: .textBackgroundColor), in: RoundedRectangle(cornerRadius: 9)
+                  Color.black.opacity(0.24), in: RoundedRectangle(cornerRadius: 9)
                 )
                 .overlay(RoundedRectangle(cornerRadius: 9).strokeBorder(Color.primary.opacity(0.1)))
                 .onChange(of: text) { _ in resetPreview() }
@@ -151,20 +151,18 @@ struct ImportView: View {
         }
         if let preview, let merge {
           Button(merge.added == 0 ? L10n.text("完成（均已存在）") : L10n.text("导入 \(merge.added) 个账户")) { save(preview) }
-            .buttonStyle(.borderedProminent).keyboardShortcut(.defaultAction)
+            .buttonStyle(AuthPrimaryButtonStyle()).keyboardShortcut(.defaultAction)
             .disabled(
               busy || preview.accounts.isEmpty || (!preview.issues.isEmpty && !allowPartial))
         } else {
-          Button(needsPassword ? L10n.text("解密并预览") : L10n.text("预览账户"), action: previewInput).buttonStyle(
-            .borderedProminent
-          ).keyboardShortcut(.defaultAction)
+          Button(needsPassword ? L10n.text("解密并预览") : L10n.text("预览账户"), action: previewInput).buttonStyle(AuthPrimaryButtonStyle()).keyboardShortcut(.defaultAction)
             .disabled(
               busy || source == 3 || (source == 0 && fileData == nil)
                 || (source == 1 && text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 || (needsPassword && password.isEmpty))
         }
       }
-    }.padding(26).frame(width: 600, height: 700).background(Color.authCanvas).tint(.authAccent)
+    }.padding(26).frame(width: 600, height: 700).authGlassSurface()
       .onChange(of: manual) { _ in resetPreview() }
       .onDisappear {
         screenCapture.cancel()

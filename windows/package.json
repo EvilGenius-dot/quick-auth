@@ -1,7 +1,7 @@
 {
   "name": "quick-auth",
   "productName": "Quick Auth",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A private, bilingual system tray authenticator",
   "author": "EvilGenius-dot",
   "license": "UNLICENSED",

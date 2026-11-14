@@ -15,9 +15,12 @@ for size in [16, 32, 128, 256, 512] {
         (transform as NSAffineTransform).concat()
         let rect = NSRect(x: 92, y: 92, width: 840, height: 840)
         let background = NSBezierPath(roundedRect: rect, xRadius: 190, yRadius: 190)
-        let gradient = NSGradient(starting: NSColor(red: 0.04, green: 0.34, blue: 0.33, alpha: 1),
-                                  ending: NSColor(red: 0.09, green: 0.65, blue: 0.53, alpha: 1))!
+        let gradient = NSGradient(starting: NSColor(red: 0.035, green: 0.040, blue: 0.055, alpha: 1),
+                                  ending: NSColor(red: 0.23, green: 0.25, blue: 0.30, alpha: 1))!
         gradient.draw(in: background, angle: 65)
+        NSColor.white.withAlphaComponent(0.23).setStroke()
+        background.lineWidth = 2.5
+        background.stroke()
         let shield = NSBezierPath()
         shield.move(to: NSPoint(x: 512, y: 772))
         shield.curve(to: NSPoint(x: 728, y: 692), controlPoint1: NSPoint(x: 593, y: 720), controlPoint2: NSPoint(x: 671, y: 702))
@@ -28,7 +31,7 @@ for size in [16, 32, 128, 256, 512] {
         shield.curve(to: NSPoint(x: 512, y: 772), controlPoint1: NSPoint(x: 353, y: 702), controlPoint2: NSPoint(x: 431, y: 720))
         shield.close()
         NSColor.white.withAlphaComponent(0.96).setStroke()
-        shield.lineWidth = 34; shield.lineJoinStyle = .round; shield.stroke()
+        shield.lineWidth = 26; shield.lineJoinStyle = .round; shield.stroke()
         NSColor.white.setFill()
         for x in [420, 512, 604] { NSBezierPath(ovalIn: NSRect(x: x - 23, y: 508, width: 46, height: 46)).fill() }
         NSGraphicsContext.restoreGraphicsState()

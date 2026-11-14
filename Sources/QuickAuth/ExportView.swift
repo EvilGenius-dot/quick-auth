@@ -47,14 +47,14 @@ struct ExportView: View {
         Button(L10n.text("取消"), action: finish).keyboardShortcut(.cancelAction)
         Spacer()
         if busy { ProgressView().controlSize(.small) }
-        Button(L10n.text("导出到文件…"), action: export).buttonStyle(.borderedProminent).keyboardShortcut(
+        Button(L10n.text("导出到文件…"), action: export).buttonStyle(AuthPrimaryButtonStyle()).keyboardShortcut(
           .defaultAction
         )
         .disabled(
           busy || store.accounts.isEmpty || store.isLocked || store.loadFailed
             || (encrypted ? password.count < 8 || password != confirmation : !acceptedPlaintext))
       }
-    }.padding(28).frame(width: 550, height: 520).background(Color.authCanvas).tint(.authAccent)
+    }.padding(28).frame(width: 550, height: 520).authGlassSurface()
       .onDisappear {
         generation = UUID()
         exportTask?.cancel()

@@ -35,6 +35,8 @@
 
 ## Features
 
+A black frosted-glass interface with silver accents, outlined account cards and crisp monospaced codes. macOS uses native vibrancy; Windows 11 22H2+ uses Acrylic, with an opaque dark fallback on older systems or when transparency is reduced.
+
 | | What you can do |
 | :--- | :--- |
 | **Always within reach** | Open the menu bar / tray panel, search a service or account, and copy its current code. Countdown indicators show the next refresh. |
@@ -231,6 +233,7 @@ docs/assets/               Public artwork, never personal account screenshots
 
 | Version | Changes |
 | :--- | :--- |
+| **1.2.1** | Black frosted-glass design, monochrome cards and controls, native vibrancy / Acrylic, refreshed icons and previews. |
 | **1.2.0** | English / Chinese interfaces, Windows tray app, cross-platform encrypted backups, universal DMG, Windows installer and bilingual documentation. |
 | **1.1.1** | Visible export button and version number; expanded documentation. |
 | **1.1.0** | Encrypted/plaintext export, manual setup keys and screen/image QR import. |

@@ -2,85 +2,85 @@
   <title id="title">Quick Auth：验证码，随手可得</title>
   <desc id="desc">菜单栏身份验证器的界面示意，使用虚构账户，展示搜索、验证码倒计时、添加账户和导出备份入口。</desc>
   <defs>
-    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#edf7f3"/><stop offset="1" stop-color="#f7f9f6"/></linearGradient>
-    <linearGradient id="accent" x2="1" y2="1"><stop stop-color="#20a38a"/><stop offset="1" stop-color="#08695e"/></linearGradient>
-    <filter id="shadow" x="-30%" y="-20%" width="160%" height="160%"><feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#123f35" flood-opacity=".11"/></filter>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#0b0c10"/><stop offset="1" stop-color="#14161c"/></linearGradient>
+    <linearGradient id="accent" x2="1" y2="1"><stop stop-color="#414651"/><stop offset="1" stop-color="#15171d"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-20%" width="160%" height="160%"><feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#000000" flood-opacity=".55"/></filter>
   </defs>
   <rect width="1200" height="650" rx="24" fill="url(#bg)"/>
-  <circle cx="1110" cy="45" r="230" fill="#dcefe5" opacity=".6"/>
-  <circle cx="110" cy="650" r="215" fill="#e2efe8" opacity=".6"/>
+  <circle cx="1110" cy="45" r="230" fill="#232630" opacity=".6"/>
+  <circle cx="110" cy="650" r="215" fill="#15171e" opacity=".6"/>
   <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans CJK SC',sans-serif">
-    <rect x="66" y="78" width="164" height="30" rx="15" fill="#dceee5"/>
-    <circle cx="84" cy="93" r="4" fill="#188977"/>
-    <text x="96" y="98" font-size="12" font-weight="600" letter-spacing="1" fill="#277263">macOS + WINDOWS</text>
-    <text x="62" y="176" font-size="56" font-weight="700" letter-spacing="-2" fill="#153d33">Quick Auth</text>
-    <text x="66" y="243" font-size="38" font-weight="600" fill="#153d33">验证码，随手可得。</text>
-    <text x="67" y="290" font-size="18" fill="#607b70">从浏览器迁移，在菜单栏与托盘验证。</text>
-    <text x="67" y="319" font-size="18" fill="#607b70">搜索、复制、备份，全部在本机完成。</text>
-    <g fill="#fff" stroke="#d5e5dc">
+    <rect x="66" y="78" width="164" height="30" rx="15" fill="#22252d"/>
+    <circle cx="84" cy="93" r="4" fill="#dde4f0"/>
+    <text x="96" y="98" font-size="12" font-weight="600" letter-spacing="1" fill="#bac4d6">macOS + WINDOWS</text>
+    <text x="62" y="176" font-size="56" font-weight="700" letter-spacing="-2" fill="#f0f2f8">Quick Auth</text>
+    <text x="66" y="243" font-size="38" font-weight="600" fill="#f0f2f8">验证码，随手可得。</text>
+    <text x="67" y="290" font-size="18" fill="#969eaf">从浏览器迁移，在菜单栏与托盘验证。</text>
+    <text x="67" y="319" font-size="18" fill="#969eaf">搜索、复制、备份，全部在本机完成。</text>
+    <g fill="#191c23" stroke="#30343f">
       <rect x="66" y="371" width="138" height="42" rx="12"/>
       <rect x="216" y="371" width="138" height="42" rx="12"/>
       <rect x="366" y="371" width="138" height="42" rx="12"/>
     </g>
-    <g font-size="14" font-weight="500" fill="#326457" text-anchor="middle">
+    <g font-size="14" font-weight="500" fill="#d1d8e5" text-anchor="middle">
       <text x="135" y="397">屏幕框选扫码</text><text x="285" y="397">密码加密备份</text><text x="435" y="397">本机保护存储</text>
     </g>
-    <line x1="67" y1="473" x2="502" y2="473" stroke="#d5e4db"/>
-    <text x="67" y="511" font-size="14" fill="#70887e">中文 / English</text>
-    <text x="238" y="511" font-size="14" fill="#70887e">离线可用</text>
-    <text x="351" y="511" font-size="14" fill="#70887e">无需云端账户</text>
-    <text x="67" y="587" font-size="12" letter-spacing=".4" fill="#94a79e">界面示意 · 演示数据</text>
+    <line x1="67" y1="473" x2="502" y2="473" stroke="#30343f"/>
+    <text x="67" y="511" font-size="14" fill="#9da5b6">中文 / English</text>
+    <text x="238" y="511" font-size="14" fill="#9da5b6">离线可用</text>
+    <text x="351" y="511" font-size="14" fill="#9da5b6">无需云端账户</text>
+    <text x="67" y="587" font-size="12" letter-spacing=".4" fill="#697385">界面示意 · 演示数据</text>
     <g filter="url(#shadow)">
-      <rect x="652" y="65" width="412" height="520" rx="18" fill="#f6f7f5" stroke="#dae4dd"/>
-      <path d="M845 65 L858 52 L871 65" fill="#f6f7f5"/>
+      <rect x="652" y="65" width="412" height="520" rx="18" fill="#121419" stroke="#383d49"/>
+      <path d="M845 65 L858 52 L871 65" fill="#121419"/>
       <rect x="675" y="88" width="42" height="42" rx="13" fill="url(#accent)"/>
       <path d="M696 97 Q704 102 707 102 V112 Q707 120 696 125 Q685 120 685 112 V102 Q688 102 696 97Z" fill="none" stroke="#fff" stroke-width="1.8"/>
       <circle cx="692" cy="110" r="1.3" fill="#fff"/><circle cx="696" cy="110" r="1.3" fill="#fff"/><circle cx="700" cy="110" r="1.3" fill="#fff"/>
-      <text x="729" y="106" font-size="18" font-weight="650" fill="#233b32">Quick Auth</text>
-      <text x="729" y="125" font-size="11" fill="#8b978f">验证码，随手可得</text>
-      <rect x="984" y="98" width="57" height="24" rx="12" fill="#eaf0eb"/>
-      <circle cx="997" cy="110" r="3" fill="#17836e"/>
-      <text x="1006" y="114" font-size="10" fill="#6b7e71">仅本机</text>
-      <rect x="675" y="151" width="366" height="40" rx="10" fill="#fff" stroke="#e5ebe6"/>
-      <circle cx="693" cy="170" r="5" fill="none" stroke="#9ba69f" stroke-width="1.5"/><path d="M697 174L701 178" stroke="#9ba69f" stroke-width="1.5"/>
-      <text x="711" y="176" font-size="13" fill="#a1aca5">搜索账户或服务…</text>
-      <text x="991" y="176" font-size="10" fill="#b1b8b3">↵ 复制</text>
-      <rect x="675" y="204" width="76" height="26" rx="7" fill="#e4eee8"/>
-      <text x="687" y="222" font-size="12" font-weight="600" fill="#1a7c67">全部账户</text>
-      <text x="767" y="222" font-size="12" fill="#8a978f">已收藏</text>
-      <text x="1016" y="222" font-size="11" fill="#9aa69e">2 个</text>
+      <text x="729" y="106" font-size="15" font-family="Consolas,monospace" letter-spacing="1.6" font-weight="650" fill="#eef2fa">QUICK AUTH</text>
+      <text x="729" y="125" font-size="11" fill="#929aab">验证码，随手可得</text>
+      <rect x="984" y="98" width="57" height="24" rx="12" fill="#252830"/>
+      <circle cx="997" cy="110" r="3" fill="#d2d9e7"/>
+      <text x="1006" y="114" font-size="10" fill="#b1bacb">仅本机</text>
+      <rect x="675" y="151" width="366" height="40" rx="10" fill="#0c0e12" stroke="#30343f"/>
+      <circle cx="693" cy="170" r="5" fill="none" stroke="#858fa2" stroke-width="1.5"/><path d="M697 174L701 178" stroke="#858fa2" stroke-width="1.5"/>
+      <text x="711" y="176" font-size="13" fill="#909aac">搜索账户或服务…</text>
+      <text x="991" y="176" font-size="10" fill="#808b9e">↵ 复制</text>
+      <rect x="675" y="204" width="76" height="26" rx="7" fill="#2c303a"/>
+      <text x="687" y="222" font-size="12" font-weight="600" fill="#e4eaf5">全部账户</text>
+      <text x="767" y="222" font-size="12" fill="#929cae">已收藏</text>
+      <text x="1016" y="222" font-size="11" fill="#7f899c">2 个</text>
       <g>
-        <rect x="675" y="243" width="366" height="122" rx="12" fill="#fff" stroke="#e4eae5"/>
-        <rect x="690" y="258" width="34" height="34" rx="9" fill="#e7eeeb"/>
-        <text x="701" y="280" font-size="16" font-weight="600" fill="#34826c">G</text>
-        <text x="734" y="272" font-size="13" font-weight="600" fill="#34483e">GitHub</text>
-        <text x="734" y="288" font-size="10" fill="#8b988f">hello@example.com</text>
-        <text x="1011" y="277" font-size="16" fill="#d8b46d">★</text>
-        <text x="690" y="338" font-family="'SFMono-Regular',Consolas,monospace" font-size="29" font-weight="500" letter-spacing="3" fill="#254436">482 901</text>
-        <rect x="856" y="322" width="9" height="12" rx="2" fill="none" stroke="#a3b3a9"/>
-        <path d="M860 319H868V330" fill="none" stroke="#a3b3a9"/>
-        <circle cx="1010" cy="329" r="14" fill="none" stroke="#e8eeea" stroke-width="2"/>
-        <path d="M1010 315 A14 14 0 1 1 996 329" fill="none" stroke="#50a089" stroke-width="2"/>
-        <text x="1004" y="333" font-size="10" fill="#6f8c7b">24</text>
+        <rect x="675" y="243" width="366" height="122" rx="12" fill="#1a1d24" stroke="#343945"/>
+        <rect x="690" y="258" width="34" height="34" rx="9" fill="#2b2e36"/>
+        <text x="701" y="280" font-size="16" font-weight="600" fill="#d8dfed">G</text>
+        <text x="734" y="272" font-size="13" font-weight="600" fill="#eef2f8">GitHub</text>
+        <text x="734" y="288" font-size="10" fill="#969fb0">hello@example.com</text>
+        <text x="1011" y="277" font-size="16" fill="#dce4f3">★</text>
+        <text x="690" y="338" font-family="'SFMono-Regular',Consolas,monospace" font-size="29" font-weight="500" letter-spacing="3" fill="#f1f4fc">482 901</text>
+        <rect x="856" y="322" width="9" height="12" rx="2" fill="none" stroke="#8d98ae"/>
+        <path d="M860 319H868V330" fill="none" stroke="#8d98ae"/>
+        <circle cx="1010" cy="329" r="14" fill="none" stroke="#343946" stroke-width="2"/>
+        <path d="M1010 315 A14 14 0 1 1 996 329" fill="none" stroke="#cbd5e9" stroke-width="2"/>
+        <text x="1004" y="333" font-size="10" fill="#bcc8df">24</text>
       </g>
       <g>
-        <rect x="675" y="377" width="366" height="122" rx="12" fill="#fff" stroke="#e4eae5"/>
-        <rect x="690" y="392" width="34" height="34" rx="9" fill="#edf0f8"/>
-        <text x="701" y="414" font-size="16" font-weight="600" fill="#7383b1">G</text>
-        <text x="734" y="406" font-size="13" font-weight="600" fill="#34483e">Google</text>
-        <text x="734" y="422" font-size="10" fill="#8b988f">work@example.com</text>
-        <text x="1011" y="411" font-size="16" fill="#c8d1ca">☆</text>
-        <text x="690" y="472" font-family="'SFMono-Regular',Consolas,monospace" font-size="29" font-weight="500" letter-spacing="3" fill="#254436">715 046</text>
-        <circle cx="1010" cy="463" r="14" fill="none" stroke="#e8eeea" stroke-width="2"/>
-        <path d="M1010 449 A14 14 0 1 1 996 463" fill="none" stroke="#50a089" stroke-width="2"/>
-        <text x="1004" y="467" font-size="10" fill="#6f8c7b">24</text>
+        <rect x="675" y="377" width="366" height="122" rx="12" fill="#1a1d24" stroke="#343945"/>
+        <rect x="690" y="392" width="34" height="34" rx="9" fill="#2b2e36"/>
+        <text x="701" y="414" font-size="16" font-weight="600" fill="#d8dfed">G</text>
+        <text x="734" y="406" font-size="13" font-weight="600" fill="#eef2f8">Google</text>
+        <text x="734" y="422" font-size="10" fill="#969fb0">work@example.com</text>
+        <text x="1011" y="411" font-size="16" fill="#768299">☆</text>
+        <text x="690" y="472" font-family="'SFMono-Regular',Consolas,monospace" font-size="29" font-weight="500" letter-spacing="3" fill="#f1f4fc">715 046</text>
+        <circle cx="1010" cy="463" r="14" fill="none" stroke="#343946" stroke-width="2"/>
+        <path d="M1010 449 A14 14 0 1 1 996 463" fill="none" stroke="#cbd5e9" stroke-width="2"/>
+        <text x="1004" y="467" font-size="10" fill="#bcc8df">24</text>
       </g>
-      <line x1="652" y1="525" x2="1064" y2="525" stroke="#e0e8e1"/>
-      <text x="676" y="559" font-size="13" fill="#147b65">＋ 添加账户</text>
-      <path d="M783 548V558H797V548M790 555V542M786 546L790 542L794 546" fill="none" stroke="#147b65" stroke-width="1.3"/>
-      <text x="804" y="559" font-size="13" fill="#147b65">导出备份</text>
-      <text x="967" y="559" font-size="10" fill="#9da99f">v1.2.0</text>
-      <text x="1024" y="560" font-size="17" fill="#879b8e">⚙</text>
+      <line x1="652" y1="525" x2="1064" y2="525" stroke="#303540"/>
+      <text x="676" y="559" font-size="13" fill="#cfd8eb">＋ 添加账户</text>
+      <path d="M783 548V558H797V548M790 555V542M786 546L790 542L794 546" fill="none" stroke="#cfd8eb" stroke-width="1.3"/>
+      <text x="804" y="559" font-size="13" fill="#cfd8eb">导出备份</text>
+      <text x="967" y="559" font-size="10" fill="#77849b">v1.2.1</text>
+      <text x="1024" y="560" font-size="17" fill="#9ba8bf">⚙</text>
     </g>
   </g>
 </svg>

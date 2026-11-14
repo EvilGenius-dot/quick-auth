@@ -2,11 +2,6 @@ import QuickAuthCore
 import ServiceManagement
 import SwiftUI
 
-extension Color {
-  static let authAccent = Color(red: 0.05, green: 0.52, blue: 0.46)
-  static let authCanvas = Color(nsColor: .windowBackgroundColor)
-}
-
 struct MenuBarView: View {
   @ObservedObject var store: AppStore
   let importAction: () -> Void
@@ -41,9 +36,8 @@ struct MenuBarView: View {
       }
       footer
     }
-    .frame(width: 388, height: 568)
-    .background(Color.authCanvas)
-    .tint(.authAccent)
+    .frame(width: 400, height: 600)
+    .authGlassSurface()
     .onReceive(NotificationCenter.default.publisher(for: .focusSearch)) { _ in searchFocused = true
     }
     .alert(
@@ -81,24 +75,25 @@ struct MenuBarView: View {
 
   private var header: some View {
     HStack(spacing: 10) {
-      Image(systemName: "lock.shield.fill").font(.system(size: 20, weight: .medium))
-        .foregroundStyle(.white).frame(width: 38, height: 38)
+      Image(systemName: "lock.shield").font(.system(size: 22, weight: .light))
+        .foregroundStyle(Color.authText).frame(width: 42, height: 42)
         .background(
           LinearGradient(
-            colors: [.authAccent, Color(red: 0.08, green: 0.38, blue: 0.37)],
+            colors: [.white.opacity(0.14), .white.opacity(0.025)],
             startPoint: .topLeading, endPoint: .bottomTrailing),
-          in: RoundedRectangle(cornerRadius: 12))
-      VStack(alignment: .leading, spacing: 2) {
-        Text("Quick Auth").font(.system(size: 17, weight: .semibold))
-        Text(L10n.text("验证码，随手可得")).font(.system(size: 10)).foregroundStyle(.secondary)
+          in: RoundedRectangle(cornerRadius: 13))
+        .overlay(RoundedRectangle(cornerRadius: 13).strokeBorder(Color.white.opacity(0.16)))
+      VStack(alignment: .leading, spacing: 5) {
+        Text("QUICK AUTH").font(.system(size: 15, weight: .semibold, design: .monospaced)).tracking(1.8)
+        Text(L10n.text("验证码，随手可得")).font(.system(size: 10)).foregroundStyle(Color.authMuted)
       }
       Spacer()
       HStack(spacing: 4) {
-        Circle().fill(store.demo ? Color.orange : Color.authAccent).frame(width: 5, height: 5)
+        Circle().fill(Color.authAccent).frame(width: 4, height: 4)
         Text(store.demo ? L10n.text("演示模式") : L10n.text("仅本机")).font(.system(size: 10, weight: .medium))
-      }.foregroundStyle(.secondary).padding(.horizontal, 8).padding(.vertical, 5)
-        .background(Color.primary.opacity(0.04), in: Capsule())
-    }.padding(20).padding(.bottom, 2)
+      }.foregroundStyle(Color.authMuted).padding(.horizontal, 8).padding(.vertical, 6)
+        .overlay(Capsule().strokeBorder(Color.authLine))
+    }.padding(22).padding(.bottom, 1)
   }
 
   private var searchBar: some View {
@@ -115,11 +110,14 @@ struct MenuBarView: View {
         }.buttonStyle(.plain)
           .help(L10n.text("清除搜索"))
       } else {
-        Text(L10n.text("↵ 复制")).font(.system(size: 10)).foregroundStyle(.tertiary)
+        Text("↵").font(.system(size: 11, design: .monospaced)).foregroundStyle(Color.authMuted)
+          .frame(width: 24, height: 22)
+          .overlay(RoundedRectangle(cornerRadius: 5).strokeBorder(Color.authLine))
       }
     }.padding(.horizontal, 12).padding(.vertical, 11)
-      .background(Color(nsColor: .textBackgroundColor), in: RoundedRectangle(cornerRadius: 10))
-      .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.primary.opacity(0.06)))
+      .background(Color.black.opacity(0.24), in: RoundedRectangle(cornerRadius: 11))
+      .overlay(RoundedRectangle(cornerRadius: 11).strokeBorder(
+        Color.white.opacity(searchFocused ? 0.28 : 0.10)))
       .onExitCommand { store.query = "" }
   }
 
@@ -129,7 +127,9 @@ struct MenuBarView: View {
         filter(L10n.text("全部账户"), favorite: false)
         filter(L10n.text("已收藏"), favorite: true)
         Spacer()
-        Text(L10n.text("\(store.visibleAccounts.count) 个")).font(.system(size: 10)).foregroundStyle(.tertiary)
+        Text(String(format: "%02d", store.visibleAccounts.count))
+          .font(.system(size: 10, design: .monospaced)).foregroundStyle(Color.authMuted)
+          .accessibilityLabel(L10n.text("\(store.visibleAccounts.count) 个"))
       }.padding(.horizontal, 20).padding(.bottom, 10)
       if store.visibleAccounts.isEmpty {
         Spacer()
@@ -143,7 +143,7 @@ struct MenuBarView: View {
       } else {
         TimelineView(.periodic(from: .now, by: 1)) { context in
           ScrollView {
-            LazyVStack(spacing: 9) {
+            LazyVStack(spacing: 11) {
               ForEach(store.visibleAccounts) { account in
                 AccountCard(
                   account: account, date: context.date, copied: store.copiedID == account.id,
@@ -172,9 +172,9 @@ struct MenuBarView: View {
         .system(size: 11, weight: store.favoritesOnly == favorite ? .semibold : .regular)
       )
       .padding(.horizontal, 9).padding(.vertical, 5)
-      .foregroundStyle(store.favoritesOnly == favorite ? Color.authAccent : .secondary)
+      .foregroundStyle(store.favoritesOnly == favorite ? Color.authText : Color.authMuted)
       .background(
-        store.favoritesOnly == favorite ? Color.authAccent.opacity(0.09) : .clear,
+        store.favoritesOnly == favorite ? Color.white.opacity(0.09) : .clear,
         in: RoundedRectangle(cornerRadius: 6))
     }.buttonStyle(.plain)
   }
@@ -195,7 +195,7 @@ struct MenuBarView: View {
         Label(L10n.text("导入我的账户"), systemImage: "square.and.arrow.down").padding(.horizontal, 15).padding(
           .vertical, 5)
       }
-      .buttonStyle(.borderedProminent).controlSize(.large).padding(.top, 24)
+      .buttonStyle(AuthPrimaryButtonStyle()).controlSize(.large).padding(.top, 24)
       Text(L10n.text("支持 JSON / TXT · 密码保护备份")).font(.system(size: 10)).foregroundStyle(.tertiary).padding(
         .top, 12)
       Spacer()
@@ -210,7 +210,7 @@ struct MenuBarView: View {
         Color.authAccent)
       Text(L10n.text("验证码已锁定")).font(.system(size: 19, weight: .semibold))
       Text(L10n.text("使用 Touch ID 或 Mac 登录密码继续")).font(.system(size: 12)).foregroundStyle(.secondary)
-      Button(store.isUnlocking ? L10n.text("正在验证…") : L10n.text("解锁")) { store.unlock() }.buttonStyle(.borderedProminent)
+      Button(store.isUnlocking ? L10n.text("正在验证…") : L10n.text("解锁")) { store.unlock() }.buttonStyle(AuthPrimaryButtonStyle())
         .controlSize(.large).disabled(store.isUnlocking)
       Spacer()
     }.frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -222,7 +222,7 @@ struct MenuBarView: View {
       Image(systemName: "exclamationmark.lock").font(.system(size: 36)).foregroundStyle(.orange)
       Text(L10n.text("暂时无法读取账户")).font(.headline)
       Text(L10n.text("请检查钥匙串权限，然后重试。\n现有账户不会被覆盖。")).multilineTextAlignment(.center).foregroundStyle(.secondary)
-      Button(L10n.text("重新读取")) { store.reload() }.buttonStyle(.borderedProminent)
+      Button(L10n.text("重新读取")) { store.reload() }.buttonStyle(AuthPrimaryButtonStyle())
       Spacer()
     }.frame(maxWidth: .infinity, maxHeight: .infinity)
   }
@@ -230,22 +230,22 @@ struct MenuBarView: View {
   private var footer: some View {
     HStack(spacing: 8) {
       Button(action: importAction) {
-        Label(L10n.text("添加账户"), systemImage: "plus").font(.system(size: 12, weight: .medium))
+        Label(L10n.text("添加账户"), systemImage: "plus").font(.system(size: 11, weight: .medium))
       }
-      .buttonStyle(.plain).foregroundStyle(Color.authAccent).disabled(
+      .buttonStyle(AuthToolbarButtonStyle()).disabled(
         store.isLocked || store.loadFailed)
       Button(action: exportAction) {
         Label(L10n.text("导出备份"), systemImage: "square.and.arrow.up")
-          .font(.system(size: 12, weight: .medium))
+          .font(.system(size: 11, weight: .medium))
       }
-      .buttonStyle(.plain).foregroundStyle(Color.authAccent)
+      .buttonStyle(AuthToolbarButtonStyle())
       .disabled(store.isLocked || store.loadFailed || store.accounts.isEmpty)
       .help(store.isLocked ? L10n.text("解锁后导出备份") : (store.accounts.isEmpty ? L10n.text("添加账户后即可导出") : L10n.text("导出全部账户")))
       Spacer()
       Text(
         "v\(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? L10n.text("开发版"))"
       )
-      .font(.system(size: 10)).foregroundStyle(.tertiary)
+      .font(.system(size: 9, design: .monospaced)).foregroundStyle(Color.authMuted)
       Menu {
         Picker(L10n.text("语言 / Language"), selection: $store.language) {
           Text(L10n.text("跟随系统")).tag("system")
@@ -267,8 +267,8 @@ struct MenuBarView: View {
       }
       .menuStyle(.borderlessButton).menuIndicator(.hidden).fixedSize().help(L10n.text("设置"))
     }.padding(.horizontal, 20).padding(.vertical, 14)
-      .background(Color.primary.opacity(0.025))
-      .overlay(alignment: .top) { Rectangle().fill(Color.primary.opacity(0.06)).frame(height: 1) }
+      .background(Color.black.opacity(0.16))
+      .overlay(alignment: .top) { Rectangle().fill(Color.authLine).frame(height: 1) }
   }
 }
 
@@ -280,10 +280,6 @@ private struct AccountCard: View {
   let favorite: () -> Void
   @State private var hovering = false
   private var remaining: Int { account.remaining(at: date) }
-  private var color: Color {
-    let palette: [Color] = [.authAccent, .indigo, .orange, .blue, .purple]
-    return palette[account.title.utf8.reduce(0) { ($0 + Int($1)) % palette.count }]
-  }
   private var formattedCode: String {
     let code = account.code(at: date)
     if account.kind == .steam { return code }
@@ -292,34 +288,39 @@ private struct AccountCard: View {
   }
 
   var body: some View {
-    VStack(spacing: 13) {
+    VStack(spacing: 17) {
       HStack(spacing: 9) {
         Text(String(account.title.prefix(1)).uppercased()).font(
-          .system(size: 14, weight: .semibold)
+          .system(size: 13, weight: .medium, design: .monospaced)
         )
-        .foregroundStyle(color).frame(width: 32, height: 32)
-        .background(color.opacity(0.10), in: RoundedRectangle(cornerRadius: 9))
+        .foregroundStyle(Color.authAccent).frame(width: 34, height: 34)
+        .background(Color.white.opacity(0.045), in: RoundedRectangle(cornerRadius: 10))
+        .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.authLine))
         VStack(alignment: .leading, spacing: 3) {
           Text(account.title).font(.system(size: 12, weight: .semibold)).lineLimit(1)
-          Text(account.subtitle).font(.system(size: 10)).foregroundStyle(.secondary).lineLimit(1)
+          Text(account.subtitle).font(.system(size: 10)).foregroundStyle(Color.authMuted).lineLimit(1)
         }
         Spacer(minLength: 0)
+        Text(account.kind.rawValue.uppercased())
+          .font(.system(size: 8, weight: .medium, design: .monospaced)).tracking(0.7)
+          .foregroundStyle(Color.authMuted).padding(.horizontal, 6).padding(.vertical, 4)
+          .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Color.authLine))
         Button(action: favorite) {
           Image(systemName: account.favorite ? "star.fill" : "star").font(.system(size: 11))
             .foregroundStyle(
               account.favorite
-                ? Color.orange.opacity(0.85) : Color.secondary.opacity(hovering ? 0.6 : 0.25))
+                ? Color.authAccent : Color.authMuted.opacity(hovering ? 1 : 0.5))
         }.buttonStyle(.plain).help(account.favorite ? L10n.text("取消收藏") : L10n.text("收藏"))
       }
       HStack {
         Button(action: copy) {
           HStack(spacing: 9) {
             Text(formattedCode).font(
-              .system(size: account.digits > 8 ? 23 : 27, weight: .medium, design: .monospaced)
-            ).tracking(1.4)
+              .system(size: account.digits > 8 ? 23 : 30, weight: .medium, design: .monospaced)
+            ).tracking(2.0).monospacedDigit()
             Image(systemName: copied ? "checkmark" : "square.on.square").font(.system(size: 12))
               .opacity(copied || hovering ? 1 : 0.3)
-          }.foregroundStyle(copied ? Color.authAccent : Color.primary)
+          }.foregroundStyle(copied ? Color.authAccent : Color.authText)
             .contentShape(Rectangle())
         }.buttonStyle(.plain).help(copied ? L10n.text("已复制 · 30 秒后自动清除") : L10n.text("复制验证码"))
           .accessibilityLabel(L10n.text("复制 \(account.title) 的验证码"))
@@ -328,22 +329,26 @@ private struct AccountCard: View {
           Text("HOTP").font(.system(size: 9, weight: .medium)).foregroundStyle(.secondary)
         } else {
           ZStack {
-            Circle().stroke(Color.primary.opacity(0.06), lineWidth: 2)
+            Circle().stroke(Color.white.opacity(0.08), lineWidth: 1.5)
             Circle().trim(from: 0, to: Double(remaining) / Double(account.period))
               .stroke(
-                remaining <= 5 ? Color.orange : Color.authAccent.opacity(0.7),
-                style: StrokeStyle(lineWidth: 2, lineCap: .round)
+                remaining <= 5 ? Color.orange.opacity(0.85) : Color.authAccent.opacity(0.8),
+                style: StrokeStyle(lineWidth: 1.5, lineCap: .round)
               ).rotationEffect(.degrees(-90))
             Text("\(remaining)").font(.system(size: 9, weight: .medium, design: .monospaced))
-              .foregroundStyle(.secondary)
-          }.frame(width: 27, height: 27).help(L10n.text("\(remaining) 秒后刷新"))
+              .foregroundStyle(Color.authAccent)
+          }.frame(width: 30, height: 30).help(L10n.text("\(remaining) 秒后刷新"))
         }
       }
-    }.padding(14)
-      .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 12))
+    }.padding(16)
+      .background(
+        LinearGradient(colors: [Color.white.opacity(hovering ? 0.085 : 0.055),
+                                Color.white.opacity(0.018)],
+                       startPoint: .topLeading, endPoint: .bottomTrailing),
+        in: RoundedRectangle(cornerRadius: 15))
       .overlay(
-        RoundedRectangle(cornerRadius: 12).strokeBorder(
-          copied ? Color.authAccent.opacity(0.5) : Color.primary.opacity(hovering ? 0.12 : 0.055))
+        RoundedRectangle(cornerRadius: 15).strokeBorder(
+          copied ? Color.authAccent.opacity(0.55) : Color.white.opacity(hovering ? 0.20 : 0.10))
       )
       .onHover { hovering = $0 }
   }

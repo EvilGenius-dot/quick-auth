@@ -57,8 +57,9 @@ function renderAccounts() {
     for (const a of accounts) {
       const card = document.createElement('article'); card.className = 'card'; card.dataset.id = a.id;
       // The template is static. Imported labels always use textContent.
-      card.innerHTML = '<div class="avatar"></div><div class="identity"><strong></strong><small></small></div><button class="star"></button><div class="code-line"><button class="code"></button><span class="countdown"></span></div><div class="card-controls"><button class="copy"></button><button class="next"></button><button class="remove"></button></div>';
+      card.innerHTML = '<div class="avatar"></div><div class="identity"><strong></strong><small></small></div><span class="kind"></span><button class="star"></button><div class="code-line"><button class="code"></button><span class="countdown"></span></div><div class="card-controls"><button class="copy"></button><button class="next"></button><button class="remove"></button></div>';
       const title = a.issuer || a.account || t('unnamed'); card.querySelector('.avatar').textContent = [...title][0].toLocaleUpperCase(); card.querySelector('strong').textContent = title; card.querySelector('small').textContent = a.account || a.kind.toUpperCase();
+      card.querySelector('.kind').textContent = a.kind.toUpperCase();
       const star = card.querySelector('.star'); star.textContent = a.favorite ? '★' : '☆'; star.classList.toggle('saved', a.favorite); star.title = t(a.favorite ? 'unfavorite' : 'favorite'); star.setAttribute('aria-label', star.title); star.dataset.action = 'favorite';
       for (const name of ['copy', 'next', 'remove']) { const button = card.querySelector('.' + name); button.textContent = t(name); button.dataset.action = name === 'next' ? 'advance' : name; }
       card.querySelector('.next').hidden = a.kind !== 'hotp'; card.querySelector('.code').dataset.action = 'copy'; card.querySelector('.code').setAttribute('aria-label', `${t('copy')} · ${title}`);
