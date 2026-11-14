@@ -108,7 +108,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     window.isOpaque = false
     window.backgroundColor = .clear
     window.appearance = NSAppearance(named: .darkAqua)
-    window.titlebarAppearsTransparent = true
     window.contentView = NSHostingView(
       rootView: ImportView(store: store) { [weak self, weak window] in
         window?.close()
@@ -137,7 +136,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     window.isOpaque = false
     window.backgroundColor = .clear
     window.appearance = NSAppearance(named: .darkAqua)
-    window.titlebarAppearsTransparent = true
     window.contentView = NSHostingView(
       rootView: ExportView(store: store) { [weak self, weak window] in
         window?.close()

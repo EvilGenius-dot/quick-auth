@@ -35,7 +35,7 @@ struct AuthGlassBackground: View {
       } else {
         DesktopGlass()
         LinearGradient(
-          colors: [Color.black.opacity(0.42), Color.authCanvas.opacity(0.74)],
+          colors: [Color.black.opacity(0.64), Color.authCanvas.opacity(0.86)],
           startPoint: .topLeading, endPoint: .bottomTrailing)
         RadialGradient(
           colors: [Color.authAccent.opacity(0.12), .clear], center: .topLeading,
@@ -59,6 +59,7 @@ extension View {
     self.background { AuthGlassBackground() }
       .foregroundStyle(Color.authText)
       .tint(.authAccent)
+      .accentColor(.authAccent)
       .preferredColorScheme(.dark)
   }
 }
