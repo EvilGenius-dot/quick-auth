@@ -16,9 +16,9 @@ for size in [16, 32, 128, 256, 512] {
         let rect = NSRect(x: 92, y: 92, width: 840, height: 840)
         let background = NSBezierPath(roundedRect: rect, xRadius: 190, yRadius: 190)
         let gradient = NSGradient(starting: NSColor(red: 0.035, green: 0.040, blue: 0.055, alpha: 1),
-                                  ending: NSColor(red: 0.23, green: 0.25, blue: 0.30, alpha: 1))!
+                                  ending: NSColor(red: 0.22, green: 0.18, blue: 0.36, alpha: 1))!
         gradient.draw(in: background, angle: 65)
-        NSColor.white.withAlphaComponent(0.23).setStroke()
+        NSColor(red: 0.68, green: 0.60, blue: 1, alpha: 0.55).setStroke()
         background.lineWidth = 2.5
         background.stroke()
         let shield = NSBezierPath()
@@ -32,7 +32,7 @@ for size in [16, 32, 128, 256, 512] {
         shield.close()
         NSColor.white.withAlphaComponent(0.96).setStroke()
         shield.lineWidth = 26; shield.lineJoinStyle = .round; shield.stroke()
-        NSColor.white.setFill()
+        NSColor(red: 0.67, green: 0.74, blue: 1, alpha: 1).setFill()
         for x in [420, 512, 604] { NSBezierPath(ovalIn: NSRect(x: x - 23, y: 508, width: 46, height: 46)).fill() }
         NSGraphicsContext.restoreGraphicsState()
         let suffix = scale == 2 ? "@2x" : ""

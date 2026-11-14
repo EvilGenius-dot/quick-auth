@@ -3,7 +3,7 @@
 ### Black glass
 
 - A new black frosted-glass interface across macOS and Windows, replacing the teal theme.
-- Silver accents, translucent outlined cards, monospaced codes, subtle countdown rings and monochrome account icons.
+- Electric-blue and violet accents, translucent outlined cards, crisp monospaced codes and subtle countdown rings.
 - Matching dark import, export and settings screens, plus refreshed app icons and bilingual README previews.
 - Native macOS vibrancy and Windows 11 22H2+ Acrylic. Reduced transparency and older Windows versions use an opaque dark backdrop.
 
@@ -29,7 +29,7 @@ macOS uses an ad-hoc signature and is not notarized; Windows is unsigned. System
 ### 中文
 
 - Mac 与 Windows 全面换成黑色毛玻璃主题，移除青绿色配色。
-- 银白强调色、半透明细边框卡片、等宽验证码、精简倒计时和单色账户图标。
+- 电光蓝和紫色点缀、半透明细边框卡片、清晰的等宽验证码及精简倒计时。
 - 导入、导出、设置、应用图标及中英文 README 预览图同步更新。
 - macOS 使用原生毛玻璃，Windows 11 22H2 及以上使用 Acrylic；旧系统或降低透明度时使用纯深色背景。
 

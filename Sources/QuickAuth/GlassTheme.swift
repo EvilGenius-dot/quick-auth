@@ -2,7 +2,8 @@ import AppKit
 import SwiftUI
 
 extension Color {
-  static let authAccent = Color(red: 0.88, green: 0.91, blue: 0.97)
+  static let authAccent = Color(red: 0.68, green: 0.60, blue: 1.0)
+  static let authBlue = Color(red: 0.51, green: 0.70, blue: 1.0)
   static let authCanvas = Color(red: 0.035, green: 0.039, blue: 0.050)
   static let authText = Color(red: 0.95, green: 0.96, blue: 0.98)
   static let authMuted = Color(red: 0.58, green: 0.61, blue: 0.67)
@@ -37,11 +38,14 @@ struct AuthGlassBackground: View {
           colors: [Color.black.opacity(0.42), Color.authCanvas.opacity(0.74)],
           startPoint: .topLeading, endPoint: .bottomTrailing)
         RadialGradient(
-          colors: [Color.white.opacity(0.055), .clear], center: .topLeading,
+          colors: [Color.authAccent.opacity(0.12), .clear], center: .topLeading,
           startRadius: 0, endRadius: 390)
+        RadialGradient(
+          colors: [Color.authBlue.opacity(0.045), .clear], center: .bottomTrailing,
+          startRadius: 0, endRadius: 280)
       }
       Rectangle()
-        .fill(LinearGradient(colors: [.clear, .white.opacity(0.22), .clear],
+        .fill(LinearGradient(colors: [.clear, .authAccent.opacity(0.45), .authBlue.opacity(0.3), .clear],
                              startPoint: .leading, endPoint: .trailing))
         .frame(height: 1)
     }
@@ -64,10 +68,11 @@ struct AuthPrimaryButtonStyle: ButtonStyle {
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
       .font(.system(size: 12, weight: .semibold))
-      .foregroundStyle(Color(red: 0.07, green: 0.08, blue: 0.10))
+      .foregroundStyle(Color.white)
       .padding(.horizontal, 14).padding(.vertical, 9)
       .background(
-        LinearGradient(colors: [.white, .authAccent.opacity(0.9)],
+        LinearGradient(colors: [Color(red: 0.46, green: 0.35, blue: 0.85),
+                                Color(red: 0.23, green: 0.43, blue: 0.83)],
                        startPoint: .topLeading, endPoint: .bottomTrailing),
         in: RoundedRectangle(cornerRadius: 8))
       .opacity(enabled ? (configuration.isPressed ? 0.72 : 1) : 0.35)
@@ -80,9 +85,12 @@ struct AuthToolbarButtonStyle: ButtonStyle {
     configuration.label
       .padding(.horizontal, 10).padding(.vertical, 8)
       .foregroundStyle(Color.authText)
-      .background(Color.white.opacity(configuration.isPressed ? 0.12 : 0.045),
-                  in: RoundedRectangle(cornerRadius: 8))
-      .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Color.authLine))
+      .background(
+        LinearGradient(colors: [Color.authAccent.opacity(configuration.isPressed ? 0.23 : 0.12),
+                                Color.authBlue.opacity(0.045)],
+                       startPoint: .topLeading, endPoint: .bottomTrailing),
+        in: RoundedRectangle(cornerRadius: 8))
+      .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Color.authAccent.opacity(0.23)))
       .opacity(enabled ? 1 : 0.35)
   }
 }

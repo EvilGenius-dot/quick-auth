@@ -79,17 +79,18 @@ struct MenuBarView: View {
         .foregroundStyle(Color.authText).frame(width: 42, height: 42)
         .background(
           LinearGradient(
-            colors: [.white.opacity(0.14), .white.opacity(0.025)],
+            colors: [.authAccent.opacity(0.28), .authBlue.opacity(0.07)],
             startPoint: .topLeading, endPoint: .bottomTrailing),
           in: RoundedRectangle(cornerRadius: 13))
-        .overlay(RoundedRectangle(cornerRadius: 13).strokeBorder(Color.white.opacity(0.16)))
+        .overlay(RoundedRectangle(cornerRadius: 13).strokeBorder(Color.authAccent.opacity(0.4)))
       VStack(alignment: .leading, spacing: 5) {
         Text("QUICK AUTH").font(.system(size: 15, weight: .semibold, design: .monospaced)).tracking(1.8)
         Text(L10n.text("验证码，随手可得")).font(.system(size: 10)).foregroundStyle(Color.authMuted)
       }
       Spacer()
       HStack(spacing: 4) {
-        Circle().fill(Color.authAccent).frame(width: 4, height: 4)
+        Circle().fill(Color.authBlue).frame(width: 4, height: 4)
+          .shadow(color: .authBlue.opacity(0.55), radius: 4)
         Text(store.demo ? L10n.text("演示模式") : L10n.text("仅本机")).font(.system(size: 10, weight: .medium))
       }.foregroundStyle(Color.authMuted).padding(.horizontal, 8).padding(.vertical, 6)
         .overlay(Capsule().strokeBorder(Color.authLine))
@@ -117,7 +118,7 @@ struct MenuBarView: View {
     }.padding(.horizontal, 12).padding(.vertical, 11)
       .background(Color.black.opacity(0.24), in: RoundedRectangle(cornerRadius: 11))
       .overlay(RoundedRectangle(cornerRadius: 11).strokeBorder(
-        Color.white.opacity(searchFocused ? 0.28 : 0.10)))
+        searchFocused ? Color.authAccent.opacity(0.5) : Color.authLine))
       .onExitCommand { store.query = "" }
   }
 
@@ -172,9 +173,9 @@ struct MenuBarView: View {
         .system(size: 11, weight: store.favoritesOnly == favorite ? .semibold : .regular)
       )
       .padding(.horizontal, 9).padding(.vertical, 5)
-      .foregroundStyle(store.favoritesOnly == favorite ? Color.authText : Color.authMuted)
+      .foregroundStyle(store.favoritesOnly == favorite ? Color.authAccent : Color.authMuted)
       .background(
-        store.favoritesOnly == favorite ? Color.white.opacity(0.09) : .clear,
+        store.favoritesOnly == favorite ? Color.authAccent.opacity(0.13) : .clear,
         in: RoundedRectangle(cornerRadius: 6))
     }.buttonStyle(.plain)
   }
@@ -294,8 +295,8 @@ private struct AccountCard: View {
           .system(size: 13, weight: .medium, design: .monospaced)
         )
         .foregroundStyle(Color.authAccent).frame(width: 34, height: 34)
-        .background(Color.white.opacity(0.045), in: RoundedRectangle(cornerRadius: 10))
-        .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.authLine))
+        .background(Color.authAccent.opacity(0.07), in: RoundedRectangle(cornerRadius: 10))
+        .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.authAccent.opacity(0.17)))
         VStack(alignment: .leading, spacing: 3) {
           Text(account.title).font(.system(size: 12, weight: .semibold)).lineLimit(1)
           Text(account.subtitle).font(.system(size: 10)).foregroundStyle(Color.authMuted).lineLimit(1)
@@ -303,8 +304,8 @@ private struct AccountCard: View {
         Spacer(minLength: 0)
         Text(account.kind.rawValue.uppercased())
           .font(.system(size: 8, weight: .medium, design: .monospaced)).tracking(0.7)
-          .foregroundStyle(Color.authMuted).padding(.horizontal, 6).padding(.vertical, 4)
-          .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Color.authLine))
+          .foregroundStyle(Color.authBlue.opacity(0.85)).padding(.horizontal, 6).padding(.vertical, 4)
+          .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Color.authBlue.opacity(0.17)))
         Button(action: favorite) {
           Image(systemName: account.favorite ? "star.fill" : "star").font(.system(size: 11))
             .foregroundStyle(
@@ -348,7 +349,7 @@ private struct AccountCard: View {
         in: RoundedRectangle(cornerRadius: 15))
       .overlay(
         RoundedRectangle(cornerRadius: 15).strokeBorder(
-          copied ? Color.authAccent.opacity(0.55) : Color.white.opacity(hovering ? 0.20 : 0.10))
+          copied ? Color.authAccent.opacity(0.65) : (hovering ? Color.authAccent.opacity(0.32) : Color.authLine))
       )
       .onHover { hovering = $0 }
   }
